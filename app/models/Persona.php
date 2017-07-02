@@ -42,10 +42,10 @@ class Persona extends Eloquent {
 	 * Gestion\Usuarios\HomeController@postEditar
 	 * 
 	 */
-	public static function byId($id_persona){
-		return Persona::join('usuarios', 'persona.idPersona', '=', 'usuarios.idPersona')
+	public function scopeById($query, $idPersona){
+		return $query->join('usuarios', 'persona.idPersona', '=', 'usuarios.idPersona')
 					->join('tipousuario', 'usuarios.id_tipousuario', '=', 'tipousuario.id_tipousuario')
-					->where('persona.idPersona', '=', $id_persona)
+					->where('persona.idPersona', '=', $idPersona)
 					->where('persona.estado', '=', 1)
 					->orderBy('persona.apellidos')
 					->get()[0];

@@ -1,0 +1,151 @@
+#contenedor {               /*Estilos del contenedor*/
+    background: #eee;
+    margin:0 auto;
+    width: 72%;         /*Modificar el ancho podría afectar la galería*/
+    padding: 5px 15px;
+    /* height: 100%; */
+    border-right:2px solid #ddd;
+    border-left:2px solid #ddd;
+}
+
+#contenedor input {         /*Desaparecer el input*/
+visibility: hidden;
+display: none;
+}
+
+label img {        /*Estilos de las imagenes miniaturas*/         
+width: 100%;
+height:100%;
+}
+
+#contenedor label {          /*Estilos del contenedor de imagenes miniaturas*/
+cursor: pointer;
+font-size: 15px;
+line-height: 40px;
+max-height: 100px;
+height:13%;
+width:18.15%;
+padding: 0;
+display: inline-block;
+margin-right: 4px;
+opacity:0.7;
+border:6px solid #f0f0f0;
+box-shadow:0 0 0 1px #ccc;
+}
+
+#contenedor input:checked + label {             /*Estilos de las miniaturas el seleccionarla con un clic*/
+position: relative;
+opacity:1;                      /*Opacidad*/
+border:6px solid #ddd;          /*Color del borde*/
+    transition: .2s;                /*Transicion de la animacion (opacidad y rotacion)*/
+    -webkit-transition: .2s;
+    -moz-transition: .2s;
+    -o-transition: .2s;
+    transform:rotate(360deg);       /*Rotacion de la miniatura*/
+    -webkit-transform:rotate(360deg);
+    -moz-transform:rotate(360deg);
+    -o-transform:rotate(360deg);
+}
+
+.content {              /*Contenedor de las imagenes grandes*/
+position: relative;
+width: 100%;
+height:100%;
+padding: 0;
+z-index: 5;
+}
+
+.content div {      /*Contenedor de cada imagen individual*/
+position: absolute;
+z-index: -100;
+opacity: 0;
+}
+
+#contenedor input.tab-selector-1:checked ~ .content .content-1,
+#contenedor input.tab-selector-2:checked ~ .content .content-2,
+#contenedor input.tab-selector-3:checked ~ .content .content-3,
+#contenedor input.tab-selector-4:checked ~ .content .content-4,
+#contenedor input.tab-selector-5:checked ~ .content .content-5 {            /*Mostrar las imagenes al seleccionarlas*/
+z-index: 100;
+opacity: 1;
+    -webkit-transition: all ease-out 0.2s 0.1s;         /*Transicion al aparecer*/
+    -moz-transition: all ease-out 0.2s 0.1s;
+    -o-transition: all ease-out 0.2s 0.1s;
+}
+
+.content div img {          /*Estilos de las imagenes grandes*/
+margin-top:5px;
+width: 97.30%;
+height:90%;
+border:6px solid #f0f0f0;
+box-shadow:0 0 0 1px #ccc;
+}
+
+/*Media queries para que sea visible en diferentes resoluciones*/
+
+@media only screen and (max-width: 1284px) and (min-width: 821px) {  
+    #contenedor label {
+     width: 18.1%; 
+    }
+}
+
+@media only screen and (max-width: 1284px) and (min-width: 1024px) {  
+    #contenedor label {
+     width: 18.05%; 
+    }
+}
+
+@media only screen and (max-width: 1084px) and (min-width: 921px) {  
+    #contenedor label {
+     width: 17.70%; 
+    }
+}
+
+@media only screen and (max-width: 920px) and (min-width: 721px) {  
+    #contenedor label {
+     width: 17.1%;
+     height: 12%;
+    }
+}
+
+@media only screen and (max-width: 720px) and (min-width: 481px) {  
+    #contenedor label {
+     width: 17.1%; 
+     border:3px solid #ddd;
+    }
+}
+
+@media only screen and (max-width: 480px) and (min-width: 5px) {  
+    #contenedor label, #contenedor input:checked + label {
+     width: 16.7%; 
+     height:8%;
+     border:2px solid #ddd;
+    }
+    .content div img {
+     width: 97%;
+     border:3px solid #ddd;
+    }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 600px) and (orientation: portrait) {  
+    #contenedor label {
+     width: 18.5%; 
+     height:8%;
+     border:2px solid #ddd;
+    }
+    .content div img {
+     width: 97%;
+     border:3px solid #ddd;
+    }
+}
+
+@media only screen and (max-width: 480px) and (orientation: landscape) {
+    #contenedor label {
+        height:18% !important;
+        width:18.3%;
+    }
+
+    .content div img {
+        width:99%;
+    }
+}

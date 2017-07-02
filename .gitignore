@@ -6,6 +6,10 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
-/public/assets
+/app/storage
+/public/assets/lib
+/public/assets/products_dist_img
+/public/assets/products_img
+/public/assets/user_photos
 /resources
 /.idea

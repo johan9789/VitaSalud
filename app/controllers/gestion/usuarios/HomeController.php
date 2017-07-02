@@ -103,7 +103,7 @@ class HomeController extends \BaseController {
 	 * [ajax/json]
 	 * Devuelve los datos del usuario que se va a editar, en formato json.
 	 */
-	public function postEditar(){
+	public function getEditar(){
 		$id_persona = Input::get('id');
 
 		if(!Persona::where('idPersona', '=', $id_persona)->count()){
