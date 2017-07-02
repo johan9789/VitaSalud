@@ -36,26 +36,26 @@
             				</thead>
             				<tbody id="">
                 				@foreach($proveedores as $prov)
-                				<tr>
-                  					<td>{{ $prov->razon_social_proveedor_dist }}</td>
-					                <td>{{ $prov->RUC }}</td>
-					                <td>{{ $prov->telf_proveedor_dist }}</td>
-					                <td>{{ $prov->email_proveedor_dist }}</td>
-					                <td>{{ $prov->direccion_proveedor_dist }}</td>
-                                    <td>{{ $prov->distrito->NombreDistrito }}</td>
-              						<td>
-                      					<span class="editar" data-id="J">
-                      						<a data-toggle="modal" class="btn btn-primary btn-sm" href="#editar_proveedor" onclick="editar_proveedor('{{ $prov->id_proveedor_dist }}', '{{ $prov->distrito->iddistrito }}');">
-                      							<li class="fa fa-pencil"></li>
-                  							</a>
-                      					</span>
-                      					<span class="editar" data-id="J">
-                      						<a data-toggle="modal" class="btn btn-danger btn-sm" href="#" onclick="eliminar_proveedor('{{ $prov->id_proveedor_dist }}');">
-                      							<li class="fa fa-trash"></li>
-                  							</a>
-                      					</span>
-                  					</td>
-                				</tr>
+                                    <tr>
+                                        <td>{{ $prov->razon_social_proveedor_dist }}</td>
+                                        <td>{{ $prov->RUC }}</td>
+                                        <td>{{ $prov->telf_proveedor_dist }}</td>
+                                        <td>{{ $prov->email_proveedor_dist }}</td>
+                                        <td>{{ $prov->direccion_proveedor_dist }}</td>
+                                        <td>{{ $prov->distrito->NombreDistrito }}</td>
+                                        <td>
+                                            <span class="editar" data-id="J">
+                                                <a data-toggle="modal" class="btn btn-primary btn-sm" href="#editar_proveedor" onclick="editarProveedor('{{ $prov->id_proveedor_dist }}', '{{ $prov->distrito->iddistrito }}');">
+                                                    <li class="fa fa-pencil"></li>
+                                                </a>
+                                            </span>
+                                            <span class="editar" data-id="J">
+                                                <a data-toggle="modal" class="btn btn-danger btn-sm" href="#" onclick="eliminarProveedor('{{ $prov->id_proveedor_dist }}');">
+                                                    <li class="fa fa-trash"></li>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
                 				@endforeach
             				</tbody>
           				</table>

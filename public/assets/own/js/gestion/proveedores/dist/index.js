@@ -1,7 +1,7 @@
 var url_actual = $('#url_actual').val();
 var generar_url = $('#generar_url').val();
 
-function data_table_proveedores(){
+function dataTableProveedores(){
     $('#data_table_proveedores').dataTable({
         "iDisplayLength": 10,
         "aLengthMenu": [
@@ -21,7 +21,7 @@ function data_table_proveedores(){
 }
 
 $(function(){
-    data_table_proveedores();
+    dataTableProveedores();
 
     $(document).on('submit', '#form_reg_prov', function(){
         $.post($(this).attr('action'), $(this).serialize(), function(response){
@@ -30,7 +30,7 @@ $(function(){
             $('#form_reg_prov')[0].reset();
             $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
             setTimeout(function(){
-                data_table_proveedores();
+                dataTableProveedores();
             }, 2000);
         }).fail(function(){
             apprise('Error inesperado, intente nuevamente.');
@@ -50,7 +50,7 @@ $(function(){
             $('#form_ed_prov')[0].reset();
             $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
             setTimeout(function(){
-                data_table_proveedores();
+                dataTableProveedores();
             }, 2000);
         }).fail(function(error){
             apprise('Error inesperado, intente nuevamente.');
@@ -61,10 +61,10 @@ $(function(){
 
 });
 
-function editar_proveedor(proveedor, distrito){
+function editarProveedor(proveedor, distrito){
     $('#gif_editar_proveedor').show();
     $('#sel_distritos').html('');
-    $.get(generar_url + '/gestion/proveedores/dist/' + proveedor, {'type': 'json'}, function(data){
+    $.get(generar_url + '/gestion/proveedores/dist/' + proveedor, {type: 'json'}, function(data){
         $('#txt_ruc').val(data.RUC).focus();
         $('#txt_razon_social').val(data.razon_social_proveedor_dist);
         $('#txt_direccion_proveedor').val(data.direccion_proveedor_dist);
@@ -74,7 +74,7 @@ function editar_proveedor(proveedor, distrito){
     }).fail(function(){
         apprise('Error inesperado, intente nuevamente.');
     });
-    $.get(generar_url + '/gestion/proveedores/dist/' + proveedor, {'type': 'jsdist'}, function(data){
+    $.get(generar_url + '/gestion/proveedores/dist/' + proveedor, {type: 'jsdist'}, function(data){
         var select = '';
         $.each(data, function(i, e){
             if(i == distrito){
@@ -90,8 +90,8 @@ function editar_proveedor(proveedor, distrito){
     });
 }
 
-function eliminar_proveedor(proveedor){
-    apprise('¿Está seguro de eliminar este proveedor?', {'animate':true, 'verify':true}, function(question){
+function eliminarProveedor(proveedor){
+    apprise('¿Está seguro de eliminar este proveedor?', {animate: true, verify: true}, function(question){
         if(question){
             $.ajax({
                 url: generar_url + '/gestion/proveedores/adm/' + proveedor,
@@ -101,7 +101,7 @@ function eliminar_proveedor(proveedor){
                 apprise(response);
                 $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
                 setTimeout(function(){
-                    data_table_proveedores();
+                    dataTableProveedores();
                 }, 1000);
             }).fail(function(){
                 apprise('Error inesperado, intente nuevamente.');

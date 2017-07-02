@@ -21,7 +21,7 @@ class ProveedorDistribuidor extends Eloquent {
 	 * 
 	 */
 	public function scopeLista($query){
-		return $query->with('distrito')->where('estado_proveedor_dist', '=', 1);
+		return $query->with('distrito')->where('estado_proveedor_dist', 1);
 	}	
 
 }
