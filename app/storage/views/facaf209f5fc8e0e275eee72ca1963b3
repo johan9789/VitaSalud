@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Iniciar sesión - VitaSalud</title>
+<meta name="msapplication-TileColor" content="#5bc0de">
+<meta name="msapplication-TileImage" content="assets/img/metis-tile.png">
+<?php echo HTML::style('assets/lib/bootstrap/css/bootstrap.min.css'); ?>
+
+<?php echo HTML::style('assets/lib/font-awesome/css/font-awesome.min.css'); ?>
+
+<?php echo HTML::style('assets/css/main.min.css'); ?>
+
+<?php echo HTML::style('assets/lib/animate.css/animate.min.css'); ?>
+
+</head>
+<body class="login">
+
+<div class="form-signin">
+  	<div class="text-center"> <?php echo HTML::image('assets/img/logo.png', 'Metis Logo'); ?> </div>
+  	<hr>
+  	<div class="tab-content">
+        <div id="login" class="tab-pane active">
+            <?php echo Form::open(['url' => 'login']); ?>
+
+                <p class="text-muted text-center"> Ingresa tu usuario y contraseña </p>
+                <?php echo Form::text('usuario', '', ['required', 'placeholder' => 'Usuario', 'class' => 'form-control top', 'autofocus']); ?>
+
+                <?php echo Form::password('contrasena', ['required', 'placeholder' => 'Contraseña', 'class' => 'form-control bottom']); ?>
+
+                <?php if(Session::has('mensaje')): ?>
+                <p class="text-muted text-center" style="color: red;"><?php echo e(Session::get('mensaje')); ?></p>
+                <?php endif; ?>
+                <?php echo Form::submit('Ingresar', ['class' => 'btn btn-lg btn-primary btn-block']); ?>
+
+            <?php echo Form::close(); ?>
+
+        </div>     
+    </div>   
+</div>
+
+<?php echo HTML::script('assets/lib/jquery/jquery.min.js'); ?>
+
+<?php echo HTML::script('assets/lib/bootstrap/js/bootstrap.min.js'); ?>
+
+
+</body>
+</html>

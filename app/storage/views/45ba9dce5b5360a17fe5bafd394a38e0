@@ -1,0 +1,41 @@
+<table style="width: 100%;">
+    <tr>
+        <th>Fecha:</th>
+        <td><?php echo (string)$fecha_fecha; ?></td>
+    </tr>
+    <tr>
+        <th>Hora:</th>
+        <td><?php echo (string)$fecha_hora; ?></td>
+    </tr>
+    <?php $id_cliente = $venta_detalle[0]->idCliente; ?>
+    <tr>
+        <th>Cliente:</th>
+        <td>
+            <?php if(is_null($val_tipo_cliente($id_cliente)->idEmpresa)): ?>         
+            <?php echo $clientes_XD($id_cliente)->Nombres.' '.$clientes_XD($id_cliente)->Apellidos; ?>
+
+            <?php elseif(is_null($val_tipo_cliente($id_cliente)->idPersona)): ?>
+            <?php echo $empresas_XD($id_cliente)->NombreEmpresa; ?>
+
+            <?php endif; ?>
+        </td>
+    </tr>
+</table>
+<table style="width: 100%;" border="1">
+    <tr>
+        <th>Producto</th>
+        <th>Precio</th>
+        <th>Cantidad</th>
+        <th>Total</th>
+    </tr>
+    <tbody>
+    	<?php foreach($venta_detalle as $v): ?>
+	 	<tr>
+            <td><?php echo $v->NombreProductoDist; ?></td>
+            <td><?php echo $v->PrecioUnit; ?></td>
+            <td><?php echo $v->Cantidad; ?></td>
+            <td><?php echo $v->PrecioTotal; ?></td>
+        </tr>
+    	<?php endforeach; ?>
+    </tbody>
+</table>

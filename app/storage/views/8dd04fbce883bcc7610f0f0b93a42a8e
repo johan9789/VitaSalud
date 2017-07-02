@@ -1,0 +1,90 @@
+<?php $__env->startSection('body'); ?>
+
+<?php
+Form::macro('labelXD', function($name, $value, $id){
+    return '<input type="text" name="'.$name.'"    id="lbl_'.$id.'" value="'.$value.'" style="background: transparent; border: 0 none; width: 50px;" readonly="readonly">';
+});                
+Form::macro('numero', function($name, $id, $index, $todprod){
+    return '<input name="'.$name.'" type="number" onkeyup="prec_cantidad('.$id.', '.$todprod.');" onkeydown="prec_cantidad('.$id.', '.$todprod.');" onclick="prec_cantidad('.$id.', '.$todprod.');" class="'.$name.'" id="num_'.$id.'" min="0" max="100" tabindex="'.$index.'">';
+});
+$i = 1;
+$j = 1;
+$k = 1;
+$m = 1;
+date_default_timezone_set('America/Lima');
+Form::macro('date', function($name){
+    return '<input type="date" name="'.$name.'" required="required" value="'.date('Y-m-d').'" style="width: 200px;" class="form-control">';
+});
+?>
+
+<!--Begin Datatables-->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <header>
+                <div class="icons">                
+                    <i class="fa fa-table"></i>
+                </div>
+                <h5>Lista de Productos | Realizar pedidos</h5>
+                <div class="toolbar">
+              </div>
+            </header>
+            <div id="collapse4" class="body">
+                <?php echo Form::open(['url' => 'pedidos/dist/realizar-ya', 'class' => 'form-horizontal', 'id' => 'form_ped_prod']); ?>
+
+                    <table id="dataTable" class="table table-bordered table-condensed table-hover table-striped">
+                        <tr><th colspan="6">Fecha de pedido: <?php echo date('d/m/Y'); ?></th></tr>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Prec. Dist.</th>
+                            <th>Prec. Pub.</th>
+                            <th>Categoria</th>
+                            <th align="center">Cantidad</th>
+                            <th align="center">Total</th>
+                        </tr>
+                        <tbody id="productos">
+                            <?php foreach($productos as $prod): ?>
+                            <tr>
+                                <td>
+                                    <?php echo $prod->NombreProducto; ?>
+
+                                    <?php echo Form::hidden('prod_prod[]', $prod->idProducto); ?>
+
+                                </td>
+                                <td>S/. <?php echo Form::labelXD('prec_dist[]', number_format($prod->PrecDistribuidor, 2), $m++); ?></td>
+                                <td>S/. <?php echo number_format($prod->PrecPublico, 2); ?></td>
+                                <td><?php echo $prod->NombreCategoriaProducto; ?></td>
+                                <td><?php echo Form::numero('cantidad[]', $k++, $i++, $totalproductos); ?></td>
+                                <td><?php echo Form::labelXD('total_parcial[]', 0, 'total_parcial_'.$j++); ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <tr>
+                            	<td colspan="4">          
+                                    <table>
+                                        <tr>
+                                            <td><b>Fecha de entrega:</b></td>
+                                            <td>&nbsp;</td>
+                                            <td><?php echo Form::date('fecha_entrega'); ?> </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td><?php echo Form::button('Realizar', ['id' => 'btn_realizar_pedidos', 'class' => 'btn btn-default btn-sm']); ?></td>
+                                <th>S/.<?php echo Form::labelXD('total_total', 0, 'total_total'); ?></th>
+                        	</tr>
+                        </tbody>
+                    </table>
+                <?php echo Form::close(); ?>                               
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('resources'); ?>
+<?php echo HTML::script('assets/own/js/resources/jquery-1.8.3.js'); ?>
+
+<?php echo HTML::script('assets/own/js/pedidos/general.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

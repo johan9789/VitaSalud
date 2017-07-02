@@ -1,0 +1,94 @@
+<?php $__env->startSection('body'); ?>
+
+<div>
+    <div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <header>
+                        <div class="icons"><i class="fa fa-shopping-cart"></i></div>
+                        <h5>Reporte de compras en general</h5>
+                        <div class="toolbar">
+                            <nav style="padding: 5px;">
+                                <a data-toggle="modal" id="btn_actualizar_reportes" class="btn btn-primary btn-sm" href="#">
+                                    <i class="fa fa-spinner"></i>
+                                    Actualizar
+                                </a>
+                            </nav>
+                        </div>
+                    </header>
+                    <div id="collapse4" class="body">
+                        <div id="dv_rep_compras">
+                            <div id="dv_rep_compras_act">
+                                <table id="data_table_compras" class="table table-bordered table-condensed table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>N° Factura</th>
+                                            <th>Sub Total</th>
+                                            <th>Monto IGV</th>
+                                            <th>Total</th>
+                                            <th>Proveedor</th>
+                                            <th>Opción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="">
+                                        <?php foreach($lista_reportes as $rep): ?>
+                                        <tr>
+                                            <td><?php echo e(Date::format($rep->FechaCompra, 'd/m/Y')); ?></td>
+                                            <td><?php echo e($rep->Factura); ?></td>
+                                            <td>S./ <?php echo e($rep->SubTotalCompra); ?></td>
+                                            <td>S./ <?php echo e($rep->IGVCompra); ?></td>
+                                            <td>S./ <?php echo e($rep->TotalCompra); ?></td>
+                                            <td><?php echo e($rep->proveedor->razon_social_proveedor); ?></td>
+                                            <td>
+                                                <a class="btn btn-default btn-sm" onclick="detalle_compra('<?php echo e($rep->idCompra); ?>');" data-toggle="modal" href="#detalle_compra">
+                                                    <li class="fa fa-retweet"></li> Ver Detalle
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="detalle_compra" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Detalle de compra</h4>
+            </div>
+            <center><div class="loader"></div></center>
+            <div class="modal-body">
+                <div id="div-1" class="body">
+                    <table class="table table-bordered table-condensed table-hover table-striped">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Costo</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                        </tr>
+                        <tbody id="tbd_detalle_compra"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('resources'); ?>
+<?php echo HTML::script('assets/own/js/compras/adm/reportes.js'); ?>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

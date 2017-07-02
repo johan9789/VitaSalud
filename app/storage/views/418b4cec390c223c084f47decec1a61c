@@ -1,0 +1,68 @@
+<ul id="menu" class="bg-blue dker">
+	<li class="nav-header">Menu</li>
+    <li class="nav-divider"></li>
+    <li class="active">
+        <a href="<?php echo URL::to(''); ?>">
+            <i class="fa fa-desktop"></i>
+            <span class="link-title">&nbsp;Inicio</span> 
+        </a> 
+    </li>    
+    <li class="nav-divider"></li>  
+    <?php if(!Session::has('usuario')): ?>    
+    <li>
+        <a href="<?php echo URL::to('login'); ?>">
+            <i class="fa fa-sign-in"></i>
+            <span class="link-title">Iniciar sesión</span> 
+        </a> 
+    </li>
+    <?php else: ?>
+	    <?php foreach($accesos as $acceso): ?>
+		    <?php if(is_null($acceso->url_acceso) || empty($acceso->url_acceso)): ?>
+			<li>
+			    <a href="javascript:;" title="<?php echo e($acceso->descripcion_acceso); ?>">
+			        <i class="<?php echo e($acceso->icono_acceso); ?>"></i>
+			        <span class="link-title"><?php echo e($acceso->nombre_acceso); ?></span> 
+			        <span class="fa arrow"></span>
+			    </a>
+			    <ul>
+			    	<?php foreach($sub_accesos($acceso->id_acceso) as $sub_acceso): ?>
+				    	<?php if(is_null($sub_acceso->url_acceso) || empty($sub_acceso->url_acceso)): ?>
+				    	<li>                
+			                <a href="javascript:;" title="<?php echo e($sub_acceso->descripcion_acceso); ?>">
+			                	<?php echo e($sub_acceso->nombre_acceso); ?>  <span class="fa arrow"></span>  
+			            	</a>
+			                <ul>
+			                	<?php foreach($sub_accesos($sub_acceso->id_acceso) as $mini_acceso): ?>
+			                    <li><?php echo HTML::link($mini_acceso->url_acceso, $mini_acceso->nombre_acceso, ['title' => $mini_acceso->descripcion_acceso]); ?></li>
+			                    <?php endforeach; ?>
+			                </ul>
+			            </li>
+				    	<?php else: ?>
+				    	<li>
+			                <?php echo HTML::link($sub_acceso->url_acceso, $sub_acceso->nombre_acceso, ['title' => $sub_acceso->descripcion_acceso]); ?>
+
+			                <ul></ul>
+			            </li>
+				    	<?php endif; ?>
+			    	<?php endforeach; ?>
+			    </ul>
+			</li>
+		    <?php else: ?>
+		    <li>
+			    <a href="<?php echo $acceso->url_acceso; ?>" title="<?php echo e($acceso->descripcion_acceso); ?>">
+			        <i class="<?php echo e($acceso->icono_acceso); ?>"></i>
+			        <span class="link-title"><?php echo e($acceso->nombre_acceso); ?></span> 
+			    </a>
+			</li>
+		    <?php endif; ?>
+	    <?php endforeach; ?>
+    <?php endif; ?>
+    <?php if(Session::has('usuario')): ?>
+    <li>
+        <a href="#" onclick="javascript:href='<?php echo URL::to('logout'); ?>'">
+            <i class="fa fa-sign-in"></i>
+            <span class="link-title">Salir</span> 
+        </a> 
+    </li>
+    <?php endif; ?>
+</ul>

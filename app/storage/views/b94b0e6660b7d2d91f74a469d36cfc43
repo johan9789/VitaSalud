@@ -1,0 +1,306 @@
+<?php $__env->startSection('resources'); ?>
+<script>
+	function listaproductos(){
+		var arreglo = new Array();
+		<?php foreach($productos as $p): ?>
+			arreglo.push(<?php echo e($p->CodBarras); ?>);
+		<?php endforeach; ?>
+		return arreglo;
+	}
+</script>
+<?php echo HTML::script('assets/own/js/gestion/productos/index.js'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('body'); ?>
+
+<!--Begin Datatables-->
+<div id="tabla-productos">
+    <div id="load-productos">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <header>
+                        <div class="icons"><i class="fa fa-table"></i></div>
+                        <h5>Lista de Productos registrados</h5>
+                        <div class="toolbar">
+                            <nav style="padding: 5px;">
+                                <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-default btn-sm" href="#nueva_categoria">
+                                    <i class="glyphicon glyphicon-file"></i>
+                                    Nueva Categoria
+                                </a>    
+                                <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-default btn-sm" href="#nuevo_producto">
+                                    <i class="glyphicon glyphicon-file"></i>
+                                    Nuevo Producto
+                                </a>
+                            </nav>
+                        </div>
+                    </header>
+                    <div id="mensaje">
+                        <?php if(Session::has('mensaje')): ?>
+                        <?php /* Session::get('mensaje') */ ?>
+                        <?php endif; ?>
+                    </div>
+                    <div id="collapse4" class="body">
+                        <table id="data_table_productos" class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Cod. Barras</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Detalle</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="productos">
+                                <?php foreach($productos as $prod): ?>
+                                <tr>
+                                    <td>
+                                        <a data-toggle="modal" href="#prod_det">
+                                          <?php if(empty($prod->UrlFotoProducto)): ?>
+                                            <?php echo HTML::image('assets/products_img/product-default.png', $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]); ?>
+
+                                          <?php else: ?>
+                                            <?php echo HTML::image('assets/products_img/'.$prod->UrlFotoProducto, $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]); ?>
+
+                                          <?php endif; ?>
+                                        </a>
+                                    </td>
+                                    <td><label><?php echo e($prod->CodBarras); ?></label></td>
+                                    <td><?php echo e($prod->NombreProducto); ?></td>
+                                    <td><?php echo e($prod->NombreCategoriaProducto); ?></td>
+                                    <?php if(strlen($p->DetallesProducto) > 30): ?>
+                                    <td><?php echo substr($prod->DetallesProducto, 0, 30); ?>...</td>
+                                    <?php else: ?>
+                                    <td><?php echo $prod->DetallesProducto; ?></td>
+                                    <?php endif; ?>
+                                    <td>
+                                        <span class="editar" data-id="<?php echo e($prod->idProducto); ?>">
+                                            <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-primary btn-sm" href="#editar_producto">                   
+                                                <li class="fa fa-pencil"></li>
+                                            </a>
+                                        </span>
+                                        <span class="eliminar" data-id="<?php echo e($prod->idProducto); ?>">
+                                            <a class="btn btn-danger btn-sm" href="#eliminar_producto" data-toggle="modal">
+                                                <li class="fa fa-trash"></li>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <?php echo "Jhontan"; ?>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </div>
+</div>
+<!--End Datatables-->
+
+<span id="ur" name="<?php echo URL::to('gestion/productos'); ?>"></span>
+<span id="u" name="<?php echo URL::to(''); ?>"></span>
+
+<!-- #helpModal Producto-->
+<div id="nuevo_producto" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Registrar Productos</h4>
+            </div>
+            <?php echo Form::open(['url' => 'gestion/productos/registrarprod', 'class' => 'form-horizontal', 'files'=>true]); ?>
+
+                <div class="modal-body">
+                    <div id="div-1" class="body">
+                    	<div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Cod. Barras</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::text('codbarras', '', ['required', 'class' => 'form-control', 'id' => 'txtcodbarras']); ?>
+
+                                <label id="error_codbarras" style="display:none; color: red;"></label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Producto</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::text('producto', '', ['required', 'class' => 'form-control']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Detalles</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::textarea('detalles', '', ['required', 'class' => 'form-control']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Foto</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::file('img_file', ['required', 'class' => 'form-control', 'id' => 'img_file', 'title' => 'Imagen del nuevo producto', 'data-filename-placement' => 'inside']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Categoría</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::select('categoria', $categoriaproductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de categoria...', 'tabindex' => '2']); ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-actions no-margin-bottom">
+                        <?php echo Form::submit('Registrar', ['class' => 'btn btn-primary']); ?>
+
+                    </div>                
+                </div>
+            <?php echo Form::close(); ?>
+
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --><!-- /#helpModal -->
+
+<!-- #helpModal Producto Detalle-->
+<div id="prod_det" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="div-1" class="body">
+                    <center>
+                        <?php echo Form::open(['url' => 'gestion/productos/cambimgprod', 'files' => true, 'class' => 'form-vertical', 'id' => 'form_cambiar_img_prod']); ?>
+
+                            <div class="form-group">
+                                <div id="imagen_producto" align="center"></div>
+                                <br>
+                                <span id="url_img_prod" url="<?php echo e(URL::to('assets/products_img/')); ?>"></span>
+                                    <?php echo Form::file('camb_img_file', ['required', 'id' => 'camb_img_file', 'data-filename-placement' => 'inside', 'title' => 'Escoger nueva imagen']); ?>
+
+                            </div>
+                            <div id="inp"></div>
+                            <div class="form-actions no-margin-bottom">
+                                <?php echo Form::button('Cambiar Imagen', ['class' => 'btn btn-primary', 'id' => 'btn_cambiar_img_prod']); ?>
+
+                            </div>
+                        <?php echo Form::close(); ?>
+
+                    </center>
+                </div>
+                <div class="form-group">
+                    <label for="text1" class="control-label col-lg-4">Detalle: </label>
+                    <div class="col-lg-8"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="detalle_producto" align="center"></div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --><!-- /#helpModal -->
+
+<!-- #helpModal Editar Producto-->
+<div id="editar_producto" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Editar Producto</h4>
+            </div>
+            <div class="modal-body">
+                <div id="div-1" class="body">
+                    <?php echo Form::open(['url' => 'gestion/productos/modificarprod', 'class' => 'form-horizontal', 'id' =>'form_editar']); ?>
+
+                    	<div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Cod. Barras</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::text('codbarras', '', ['required', 'class' => 'form-control', 'id' =>'codbarras', 'disabled' => 'disabled']); ?>
+
+                            </div>
+                        </div>    
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Producto</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::text('producto', '', ['required', 'class' => 'form-control', 'id' =>'producto']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Detalles</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::textarea('detalles', '', ['required', 'class' => 'form-control', 'id' =>'detalles']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Categoría</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::select('categoria', $categoriaproductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de usuario...', 'tabindex' => '2', 'id' =>'categoria']); ?>
+
+                            </div>
+                        </div>
+                        
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+            	<div class="form-actions no-margin-bottom">
+                    <?php echo Form::submit('Modificar', ['class' => 'btn btn-primary', 'id' => 'modificar']); ?>
+
+                </div>
+            </div>
+            <?php echo Form::close(); ?>
+
+        </div><!--  /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --><!-- /#helpModal -->
+
+
+<!-- #helpModal Categoria-->
+<div id="nueva_categoria" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Registrar Categoria</h4>
+            </div>
+            <div class="modal-body">
+                <div id="div-1" class="body">
+                    <?php echo Form::open(['url' => 'gestion/productos/registrarcat', 'class' => 'form-horizontal']); ?>    
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Categoria</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::text('categoria', '', ['required', 'class' => 'form-control']); ?>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="text1" class="control-label col-lg-3">Descripción</label>
+                            <div class="col-lg-8">
+                                <?php echo Form::textarea('descripcion', '', ['required', 'class' => 'form-control']); ?>
+
+                            </div>
+                        </div>
+                        <?php echo Form::hidden('ubicacion', 'productos'); ?>
+
+                        <div class="form-actions no-margin-bottom">
+                            <center><?php echo Form::submit('Registrar', ['class' => 'btn btn-primary']); ?></center>
+                        </div>
+                    <?php echo Form::close(); ?>
+
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal --><!-- /#helpModal -->
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
