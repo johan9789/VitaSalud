@@ -29,15 +29,15 @@
                                 </tr>
                             </thead>
                             <tbody id="">
-                                @foreach($lista_roles as $roles)
-                                <tr>
-                                    <td>{{{ $roles->id_tipousuario }}}</td>
-                                    <td>{{{ $roles->nombretipo }}}</td>
-                                    <td>{{{ $roles->descripcion_tipousuario }}}</td>
-                                </tr>
+                                @foreach($listaRoles as $roles)
+                                    <tr>
+                                        <td>{{{ $roles->id_tipousuario }}}</td>
+                                        <td>{{{ $roles->nombretipo }}}</td>
+                                        <td>{{{ $roles->descripcion_tipousuario }}}</td>
+                                    </tr>
                                 @endforeach                      
                             </tbody>
-                        </table>                
+                        </table>
                     </div>
                 </div>
             </div>

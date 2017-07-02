@@ -41,7 +41,7 @@ $(function(){
 				$('#form_reg_rol')[0].reset();
 				$('#nuevo_rol').modal('hide');
 			}
-		})		
+		});
 		e.preventDefault();
 	});
 

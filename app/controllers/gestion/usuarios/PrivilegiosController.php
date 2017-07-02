@@ -1,7 +1,7 @@
 <?php
 namespace Gestion\Usuarios;
 
-use Acceso, TipoUsuario, AccesoTipoUsuario;
+use Acceso, TipoUsuario, AccesoTipoUsuario, Persona, Distrito, RangoDistribuidor;
 use Input, Response, Session, View;
 
 class PrivilegiosController extends \BaseController {
@@ -17,7 +17,11 @@ class PrivilegiosController extends \BaseController {
 		$title = 'Privilegios';
 		$lista_accesos_generales = Acceso::listaGeneral()->get();
 		$lista_roles = TipoUsuario::all();
-		return View::make('gestion.usuarios.privilegios', compact('title', 'lista_accesos_generales', 'lista_roles'));
+		$personas = Persona::with(['usuario' => function($q){ $q->with('tipoUsuario'); }])->get();
+        $distritos = Distrito::lista()->lists('NombreDistrito', 'iddistrito');
+        $tipo_usuarios = TipoUsuario::where('estado_tipousuario', 1)->lists('nombretipo', 'id_tipousuario');
+        $rango_distribuidor = RangoDistribuidor::lists('NombreRangoDistribuidor', 'idRangoDistribuidor');
+		return View::make('gestion.usuarios.privilegios', compact('title', 'lista_accesos_generales', 'lista_roles', 'personas', 'distritos', 'tipo_usuarios', 'rango_distribuidor'));
 	}
 
 	public function postDetalleAcceso(){

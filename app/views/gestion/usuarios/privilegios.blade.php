@@ -40,8 +40,8 @@
                                     <td>{{{ $per->DNI }}}</td>                        
                                     <td>{{{ $per->Celular }}}</td>
                                     <td>{{{ $per->email }}}</td>
-                                    <td>{{{ $per->Usuario }}}</td>
-                                    <td>{{{ $per->nombretipo }}}</td>
+                                    <td>{{{ $per->usuario['Usuario'] }}}</td>
+                                    <td>{{{ $per->usuario['tipoUsuario']['nombretipo'] }}}</td>
                                     <td>
                                         <a href="#editar_usuario" class="btn btn-primary btn-sm" onclick="editar_usuario('{{{ $per->idPersona }}}', '{{{ $per->id_tipousuario }}}', '{{{ $per->iddistrito }}}');" data-toggle="modal" title="Editar usuario">
                                             <li class="fa fa-pencil"></li>

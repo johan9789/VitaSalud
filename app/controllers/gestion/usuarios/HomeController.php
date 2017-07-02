@@ -96,7 +96,6 @@ class HomeController extends \BaseController {
 		$persona->estado = 0;
 		$persona->save();
 		return 'Usuario eliminado correctamente.';
-
 	}
 
 	/**

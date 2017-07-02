@@ -20,8 +20,8 @@ class RolesController extends \BaseController {
 	 */
 	public function index(){
 		$title = 'Roles';
-		$lista_roles = TipoUsuario::where('estado_tipousuario', 1)->get();
-		return View::make('gestion.usuarios.roles', compact('title', 'lista_roles'));
+		$listaRoles = TipoUsuario::where('estado_tipousuario', 1)->get();
+		return View::make('gestion.usuarios.roles', compact('title', 'listaRoles'));
 	}
 
 	/**
