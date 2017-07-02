@@ -4,7 +4,7 @@ namespace Gestion;
 use Cliente, Persona, Empresa; 
 use Input, View;
 
-class ClientesController extends \BaseController{
+class ClientesController extends \BaseController {
 	
 	public function __construct(){		
 		$this->beforeFilter('administrador');
@@ -12,8 +12,8 @@ class ClientesController extends \BaseController{
 
 	public function getIndex(){
 		$title = 'Gestión de clientes';
-		$clientesN = Cliente::natural();
-		$clientesJ = Cliente::juridica();
+		$clientesN = Cliente::natural()->get();
+		$clientesJ = Cliente::juridica()->get();
 		return View::make('gestion.clientes.index', compact('title', 'clientesN', 'clientesJ'));
 	}
 

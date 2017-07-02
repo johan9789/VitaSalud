@@ -1,14 +1,15 @@
 var urlClientes = $('#ur').attr('name');
 var url = $('#u').attr('name');
+
 $(function(){
-    data_table_Clientes('#dataTableClientesN');
-    data_table_Clientes('#dataTableClientesJ');
+    dataTableClientes('#dataTableClientesN');
+    dataTableClientes('#dataTableClientesJ');
 
     $('.rad-list-categ').change(function(){
         if($(this).val() == '1'){
             $('#tabla-clientesJ').show();
             $('#tabla-clientesN').hide();
-        }else{
+        } else {
             $('#tabla-clientesJ').hide();
             $('#tabla-clientesN').show();
         }
@@ -54,34 +55,33 @@ $(function(){
     });
 
     $('#form_editar_cliente').submit(function(event){
-
         var action = $(this).attr('action');
         var method = $(this).attr('method');
         var dataEnv = $(this).serialize();
 
-        apprise('¿Seguro que desea modificar?', {'verify':true, 'animate':true}, function(r){
-          if(r){
-              $.ajax({
-                url: action,
-                type: method,
-                data: dataEnv,
-                beforeSend:function(){     
-                  $('#loaderN').html('<img src="'+url+'/assets/img/load.GIF">');
-                }
-              }).done(function(data){
-                $('#loaderN').html('');
-                $('#tabla-clientesN').load(urlClientes + ' #load-clientesN');
-                $('#editar_clienteN').modal('hide');
-                setTimeout(function(){
-                    data_table_Clientes('#dataTableClientesN');
-                }, 2000);
-                apprise(data);
-              }).fail(function(){
-                apprise('Error inesperado, intente nuevamente.');
-                $('#loaderN').html('');
-              });
-          }
-      });
+        apprise('¿Seguro que desea modificar?', {'verify': true, 'animate': true}, function(r){
+            if(r){
+                $.ajax({
+                    url: action,
+                    type: method,
+                    data: dataEnv,
+                    beforeSend:function(){
+                        $('#loaderN').html('<img src="'+url+'/assets/img/load.GIF">');
+                    }
+                }).done(function(data){
+                    $('#loaderN').html('');
+                    $('#tabla-clientesN').load(urlClientes + ' #load-clientesN');
+                    $('#editar_clienteN').modal('hide');
+                    setTimeout(function(){
+                        dataTableClientes('#dataTableClientesN');
+                    }, 2000);
+                    apprise(data);
+                }).fail(function(){
+                    apprise('Error inesperado, intente nuevamente.');
+                    $('#loaderN').html('');
+                });
+            }
+        });
 
         event.preventDefault();
     });
@@ -91,7 +91,7 @@ $(function(){
         var method = $(this).attr('method');
         var dataEnv = $(this).serialize();
 
-        apprise('¿Seguro que desea modificar?', {'verify':true, 'animate':true}, function(r){
+        apprise('¿Seguro que desea modificar?', {'verify': true, 'animate': true}, function(r){
             if(r){
                 $.ajax({
                     url: action,
@@ -105,8 +105,8 @@ $(function(){
                     $('#tabla-clientesJ').load(urlClientes + ' #load-clientesJ');
                     $('#editar_clienteJ').modal('hide');
                     setTimeout(function(){
-                        data_table_Clientes('#dataTableClientesJ');
-                    },2000);
+                        dataTableClientes('#dataTableClientesJ');
+                    }, 2000);
                     apprise(data);
                 }).fail(function(data){
                     apprise('Error inesperado, intente nuevamente.');
@@ -120,7 +120,7 @@ $(function(){
 
 });
 
-function data_table_Clientes(idTabla){
+function dataTableClientes(idTabla){
     $(idTabla).dataTable({
         "iDisplayLength": 10,
         "aLengthMenu": [

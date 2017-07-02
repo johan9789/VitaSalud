@@ -46,8 +46,9 @@ class Cliente extends Eloquent {
 	 *
 	 */
 	public function scopeNatural($query){
-		return $query->join('persona', 'cliente.idPersona', '=', 'persona.idPersona')
-						->where('persona.estado', '=', 1)->get();
+		return $query->whereNull('idEmpresa')->with(['persona' => function($q){
+		    $q->where('estado', 1);
+		}]);
 	}
 	
 	/**
@@ -58,7 +59,7 @@ class Cliente extends Eloquent {
 	 *
 	 */
 	public function scopeJuridica($query){
-		return $query->join('empresa', 'cliente.idEmpresa', '=', 'empresa.idEmpresa')->get();
+		return $query->whereNull('idPersona')->with('empresa');
 	}
 
 }
