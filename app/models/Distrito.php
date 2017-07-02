@@ -30,9 +30,7 @@ class Distrito extends Eloquent {
 	 * 
 	 */
 	public function scopeLista($query){
-		return $query->where('idprovincia', '=', 2048)
-					->where('EstadoDistrito', '=', 1)
-					->orderBy('NombreDistrito');
-	}	
+		return $query->where('idprovincia', 2048)->where('EstadoDistrito', 1)->orderBy('NombreDistrito');
+	}
 
 }

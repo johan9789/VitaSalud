@@ -1,7 +1,7 @@
 var url_actual = $('#url_actual').val();
 var generar_url = $('#generar_url').val();
 
-function data_table_proveedores(){
+function dataTableProveedores(){
     $('#data_table_proveedores').dataTable({
         "iDisplayLength": 10,
         "aLengthMenu": [
@@ -21,7 +21,7 @@ function data_table_proveedores(){
 }
 
 $(function(){
-    data_table_proveedores();
+    dataTableProveedores();
 
     $(document).on('submit', '#form_reg_prov', function(e){
         $.post($(this).attr('action'), $(this).serialize(), function(response){
@@ -30,7 +30,7 @@ $(function(){
             $('#form_reg_prov')[0].reset();
             $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
             setTimeout(function(){
-                data_table_proveedores();
+                dataTableProveedores();
             }, 2000);
         }).fail(function(){
             apprise('Error inesperado, intente nuevamente.');
@@ -50,7 +50,7 @@ $(function(){
             $('#form_ed_prov')[0].reset();
             $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
             setTimeout(function(){
-                data_table_proveedores();
+                dataTableProveedores();
             }, 2000);
         }).fail(function(){
             apprise('Error inesperado, intente nuevamente.');
@@ -104,7 +104,7 @@ function eliminar_proveedor(proveedor){
                 apprise(response);
                 $('#div_proveedores').load(url_actual + ' #div_proveedores_act');
                 setTimeout(function(){
-                    data_table_proveedores();
+                    dataTableProveedores();
                 }, 2000);
             }).fail(function(){
                 apprise('Error inesperado, intente nuevamente.');

@@ -8,9 +8,7 @@
             <div class="col-lg-12">
         		<div class="box">
                     <header>
-        				<div class="icons">
-        				<i class="fa fa-table"></i>
-        				</div>
+        				<div class="icons"><i class="fa fa-table"></i></div>
         				<h5>Proveedores</h5>
         				<div class="toolbar">
                             <nav style="padding: 5px;">
@@ -36,26 +34,26 @@
             				</thead>
             				<tbody id="">
                 				@foreach($proveedores as $prov)
-                				<tr>
-                  					<td>{{ $prov->razon_social_proveedor }}</td>
-					                <td>{{ $prov->RUC }}</td>
-					                <td>{{ $prov->telefono_proveedor }}</td>
-					                <td>{{ $prov->email_proveedor }}</td>
-					                <td>{{ $prov->direccion_proveedor }}</td>
-                                    <td>{{ $prov->distrito->NombreDistrito }}</td>
-              						<td>
-                      					<span class="editar" data-id="J">
-                      						<a data-toggle="modal" class="btn btn-primary btn-sm" href="#editar_proveedor" onclick="editar_proveedor('{{ $prov->id_proveedor }}', '{{ $prov->distrito->iddistrito }}');">
-                      							<li class="fa fa-pencil"></li>
-                  							</a>
-                      					</span>
-                      					<span class="editar" data-id="J">
-                      						<a data-toggle="modal" class="btn btn-danger btn-sm" href="#" onclick="eliminar_proveedor('{{ $prov->id_proveedor }}');">
-                      							<li class="fa fa-trash"></li>
-                  							</a>
-                      					</span>
-                  					</td>
-                				</tr>
+                                    <tr>
+                                        <td>{{ $prov->razon_social_proveedor }}</td>
+                                        <td>{{ $prov->RUC }}</td>
+                                        <td>{{ $prov->telefono_proveedor }}</td>
+                                        <td>{{ $prov->email_proveedor }}</td>
+                                        <td>{{ $prov->direccion_proveedor }}</td>
+                                        <td>{{ $prov->distrito->NombreDistrito }}</td>
+                                        <td>
+                                            <span class="editar" data-id="J">
+                                                <a data-toggle="modal" class="btn btn-primary btn-sm" href="#editar_proveedor" onclick="editar_proveedor('{{ $prov->id_proveedor }}', '{{ $prov->distrito->iddistrito }}');">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </span>
+                                            <span class="editar" data-id="J">
+                                                <a data-toggle="modal" class="btn btn-danger btn-sm" href="#" onclick="eliminar_proveedor('{{ $prov->id_proveedor }}');">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
                 				@endforeach
             				</tbody>
           				</table>
