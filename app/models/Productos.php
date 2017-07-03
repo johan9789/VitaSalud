@@ -5,12 +5,16 @@ class Productos extends Eloquent {
 	public $timestamps = false;
 
 	public function categoriaProducto(){
-		return $this->belongsTo('Categoriaproducto', 'idProducto');
+		return $this->belongsTo('Categoriaproducto', 'idCategoriaProducto');
 	}
 
 	public function detalleCompras(){
 		return $this->hasMany('DetalleCompras', 'idProductoCompra');
 	}
+
+	public function inventarios(){
+	    return $this->hasMany('Inventario', 'idProducto');
+    }
 
 	/**
 	 * ...
@@ -26,19 +30,6 @@ class Productos extends Eloquent {
 						->where('productos.estado', '=', 1)
 						->where('inventario_adm.Estado', '=', 1)
 						->groupBy('inventario_adm.idProducto');
-
-	}
-
-	/**
-	 * ...
-	 *
-	 * Utilizado en:
-	 * Gestion\ProductosController@getIndex
-	 *
-	 */
-	public static function lista_prod(){
-		return Productos::join('categoria_producto', 'productos.idCategoriaProducto', '=', 'categoria_producto.idCategoriaProducto')
-						->where('productos.estado', '=', 1)->get();
 
 	}
 
@@ -78,26 +69,10 @@ class Productos extends Eloquent {
 	 * Gestion\ProductosController@getCatalogo
 	 *
 	 */
-	public static function lista_inventario(){
-		return Productos::join('inventario_adm', 'productos.idProducto', '=', 'inventario_adm.idProducto')
-						->where('productos.estado', '=', 1)
-						->where('inventario_adm.Estado', '=', 1)
-						->groupBy('inventario_adm.idProducto');
-	}
-
-	/**
-	 * ...
-	 *
-	 * Utilizado en:
-	 * Gestion\ProductosController@postFiltrarprodxcat
-	 *
-	 */
-	public static function listaxcategoria($idCat){
-		return Productos::join('inventario_adm', 'productos.idProducto', '=', 'inventario_adm.idProducto')
-						->where('productos.estado', '=', 1)
-						->where('productos.idCategoriaProducto', '=', $idCat)
-						->where('inventario_adm.Estado', '=', 1)
-						->groupBy('inventario_adm.idProducto');
+	public function scopeListaInventario($query){
+        return $query->where('estado', 1)->with(['inventarios' => function($q){
+            $q->where('Estado', 1)->orderBy('idInventario', 'desc');
+        }]);
 	}
 
 	/**

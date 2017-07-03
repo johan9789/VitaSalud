@@ -9,18 +9,6 @@ class Categoriaproducto extends Eloquent{
 	}
 
 	/**
-	 * ...
-	 *
-	 * Utilizado en:
-	 * Gestion\ProductosController@getCatalogo
-	 * Gestion\ProductosController@getCategoria
-	 *
-	 */
-	public static function lista(){
-		return self::where('Estado', '=', 1)->get();
-	}
-
-	/**
 	 * Lista de categorías con sus productos correspondientes.
 	 *
 	 * Utilizado en:

@@ -5,7 +5,7 @@
 	function listaproductos(){
 		var arreglo = new Array();
 		@foreach($productos as $p)
-			arreglo.push({{{$p->CodBarras}}});
+			arreglo.push('{{{ $p->CodBarras }}}');
 		@endforeach
 		return arreglo;
 	}
@@ -59,30 +59,30 @@
                                 <tr>
                                     <td>
                                         <a data-toggle="modal" href="#prod_det">
-                                          @if(empty($prod->UrlFotoProducto))
-                                            {{ HTML::image('assets/products_img/product-default.png', $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]) }}
-                                          @else
-                                            {{ HTML::image('assets/products_img/'.$prod->UrlFotoProducto, $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]) }}
-                                          @endif
+                                            @if(empty($prod->UrlFotoProducto))
+                                                {{ HTML::image('assets/products_img/product-default.png', $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]) }}
+                                            @else
+                                                {{ HTML::image('assets/products_img/'.$prod->UrlFotoProducto, $prod->NombreProducto, ['class' => 'icono_prod' , 'name' => $prod->DetallesProducto, 'width' => 20, 'height' => 20, 'data-id' => $prod->idProducto]) }}
+                                            @endif
                                         </a>
                                     </td>
                                     <td><label>{{{ $prod->CodBarras }}}</label></td>
                                     <td>{{{ $prod->NombreProducto }}}</td>
-                                    <td>{{{ $prod->NombreCategoriaProducto }}}</td>
+                                    <td>{{{ $prod->categoria_producto->NombreCategoriaProducto }}}</td>
                                     @if(strlen($p->DetallesProducto) > 30)
-                                    <td>{{ substr($prod->DetallesProducto, 0, 30) }}...</td>
+                                        <td>{{ substr($prod->DetallesProducto, 0, 30) }}...</td>
                                     @else
-                                    <td>{{ $prod->DetallesProducto }}</td>
+                                        <td>{{ $prod->DetallesProducto }}</td>
                                     @endif
                                     <td>
-                                        <span class="editar" data-id="{{{ $prod->idProducto }}}">
+                                        <span onclick="editarProducto('{{{ $prod->idProducto }}}')">
                                             <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-primary btn-sm" href="#editar_producto">                   
-                                                <li class="fa fa-pencil"></li>
+                                                <i class="fa fa-pencil"></i>
                                             </a>
                                         </span>
-                                        <span class="eliminar" data-id="{{{ $prod->idProducto }}}">
+                                        <span onclick="eliminarProducto('{{{ $prod->idProducto }}}')">
                                             <a class="btn btn-danger btn-sm" href="#eliminar_producto" data-toggle="modal">
-                                                <li class="fa fa-trash"></li>
+                                                <i class="fa fa-trash"></i>
                                             </a>
                                         </span>
                                     </td>
@@ -90,7 +90,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                        <?php echo "Jhontan"; ?>
                     </div>
                 </div>
             </div>
@@ -141,7 +140,7 @@
                         <div class="form-group">
                             <label for="text1" class="control-label col-lg-3">Categoría</label>
                             <div class="col-lg-8">
-                                {{ Form::select('categoria', $categoriaproductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de categoria...', 'tabindex' => '2']) }}
+                                {{ Form::select('categoria', $categoriaProductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de categoria...', 'tabindex' => '2']) }}
                             </div>
                         </div>
                     </div>
@@ -225,11 +224,9 @@
                         <div class="form-group">
                             <label for="text1" class="control-label col-lg-3">Categoría</label>
                             <div class="col-lg-8">
-                                {{ Form::select('categoria', $categoriaproductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de usuario...', 'tabindex' => '2', 'id' =>'categoria']) }}
+                                {{ Form::select('categoria', $categoriaProductos, '', ['class' => 'form-control chzn-select', 'data-placeholder' => 'Elija un tipo de usuario...', 'tabindex' => '2', 'id' =>'categoria']) }}
                             </div>
                         </div>
-                        
-                    
                 </div>
             </div>
             <div class="modal-footer">

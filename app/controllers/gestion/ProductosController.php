@@ -1,6 +1,7 @@
 <?php
 namespace Gestion;
-/** 
+
+/**
  * Gestión de Productos. 
  */
 class ProductosController extends \BaseController {
@@ -12,12 +13,12 @@ class ProductosController extends \BaseController {
 		if(!\Session::has('usuario') || \Session::get('tipo_usuario') != 'Administrador'){
 			return \Redirect::to('');
 		}
-		$productos = \Productos::lista_prod();
-		$categoriaproductos = \Categoriaproducto::lists('NombreCategoriaProducto', 'idCategoriaProducto');
+		$productos = \Productos::where('estado', 1)->with('categoriaProducto')->get();
+		$categoriaProductos = \Categoriaproducto::lists('NombreCategoriaProducto', 'idCategoriaProducto');
 		$sel_categoria = ['0' => 'Elegir Categoria:'];
-		$sel_categoria += $categoriaproductos;
+		$sel_categoria += $categoriaProductos;
 		$title = 'Gestión de Productos';
-		return \View::make('gestion.productos.index', compact('productos', 'i', 'categoriaproductos', 'sel_categoria', 'title'));
+		return \View::make('gestion.productos.index', compact('productos', 'categoriaProductos', 'sel_categoria', 'title'));
 	}
 	
 	/**
@@ -126,17 +127,14 @@ class ProductosController extends \BaseController {
 		}		
 	}
 
-	/*
+	/**
 	 * [ajax/json]
 	 *
 	 */
-	public function postEditarcategoria($idCategoriaProducto = null){
-		if(is_null($idCategoriaProducto)){
-			return "Error";
-		}
+	public function getEditarcategoria($idCategoriaProducto = null){
 		\Session::put('id_editar_cat', $idCategoriaProducto);
-		$cp = \Categoriaproducto::find($idCategoriaProducto);
-		return \Response::json($cp);
+		$categoriaProducto = \Categoriaproducto::findOrFail($idCategoriaProducto);
+		return $categoriaProducto;
 	}
 
 	/**
@@ -147,12 +145,12 @@ class ProductosController extends \BaseController {
 		if(!\Session::has('id_editar_cat')){
 			return 'Error';
 		}
-		$id_c_m = \Session::get('id_editar_cat');
-		$cp = \Categoriaproducto::find($id_c_m);
-		$inputs = \Input::All();
-		$cp->NombreCategoriaProducto 		= $inputs['categoria'];
-		$cp->DescripcionCategoriaProducto	= $inputs['descripcion'];
-		$cp->save();
+        $inputs = \Input::All();
+		$id = \Session::get('id_editar_cat');
+		$categoriaProducto = \Categoriaproducto::findOrFail($id);
+		$categoriaProducto->NombreCategoriaProducto = $inputs['categoria'];
+		$categoriaProducto->DescripcionCategoriaProducto= $inputs['descripcion'];
+		$categoriaProducto->save();
 		\Session::forget('id_editar_cat');
 		return "Categoria Modificada";
 	}
@@ -161,14 +159,14 @@ class ProductosController extends \BaseController {
 	 * [ajax]
 	 * 
 	 */
-	public function postEliminarprod($idProducto=null){
-		$p = \Productos::find($idProducto);
-		if(is_null($idProducto) || empty($p)){
+	public function postEliminarprod($idProducto = null){
+		$producto = \Productos::find($idProducto);
+		if(is_null($idProducto) || empty($producto)){
 			\Session::flash('ErrorElimProd', 'Error al eliminar producto');
 			return "Error al Eliminar";
 		} else {
-			$p->estado = 0;
-			$p->save();
+			$producto->estado = 0;
+			$producto->save();
 			return "Producto eliminado.";
 		}		
 	}
@@ -177,13 +175,10 @@ class ProductosController extends \BaseController {
 	 * [ajax/json]
 	 *
 	 */
-	public function postEditarprod($idProducto = null){
-		if(is_null($idProducto)){
-			return "Error";
-		}
+	public function getEditarprod($idProducto = null){
 		\Session::put('id_editar_prod', $idProducto);
-		$productos = \Productos::find($idProducto);
-		return \Response::json($productos);
+		$producto = \Productos::findOrFail($idProducto);
+		return $producto;
 	}
 
 	/**
@@ -209,21 +204,25 @@ class ProductosController extends \BaseController {
 	 * [ajax/json]
 	 * Filtrar productos por categoria
 	 */
-	public function postFiltrarprodxcat($idCat = null){
+	public function getFiltrarprodxcat($idCat = null){
 		if($idCat == '0'){
-			$productos = \Productos::lista_inventario()->get();
-			return \Response::json($productos);
+			$productos = \Productos::listaInventario()->get();
+			return $productos;
 		}
-		$productos = \Productos::listaxcategoria($idCat)->get();
-		return \Response::json($productos);
+        $categoriaProducto = \Categoriaproducto::findOrFail($idCat);
+		$productos = $categoriaProducto->productos()->where('estado', 1)
+                        ->with(['inventarios' => function($q){
+                            $q->where('Estado', 1)->orderBy('idInventario', 'desc');
+                        }])->get();
+		return $productos;
 	}
 
 	/** 
 	 * Muestra el catálogo de productos.
 	 */
 	public function getCatalogo(){
-		$productos = \Productos::lista_inventario()->get();
-		$listacategoria = \Categoriaproducto::lista();
+		$productos = \Productos::listaInventario()->get();
+		$listacategoria = \Categoriaproducto::where('Estado', 1)->get();
 		$categoriaproductos = \Categoriaproducto::lists('NombreCategoriaProducto', 'idCategoriaProducto');
 		$sel_categoria = ['0' => 'Elegir Categoria:'];
 		$sel_categoria += $categoriaproductos;
@@ -232,13 +231,12 @@ class ProductosController extends \BaseController {
 	}
 
 	/**
-	*	Muestra las categorías registradas
-	*/
+	 *	Muestra las categorías registradas
+	 */
 	public function getCategoria(){
-		$j = 1;
-		$listacategoria = \Categoriaproducto::lista();
+		$categorias = \Categoriaproducto::where('Estado', 1)->get();
 		$title = 'Categorías';
-		return \View::make('gestion.productos.categoria', compact('listacategoria', 'title', 'j'));
+		return \View::make('gestion.productos.categoria', compact('categorias', 'title'));
 	}
 
 	/**

@@ -1,7 +1,7 @@
-$(function(){
-    var urlProductos = $('#ur').attr('name');
-    var url = $('#u').attr('name');
+var urlProductos = $('#ur').attr('name');
+var url = $('#u').attr('name');
 
+$(function(){
     $('#data_table_productos').dataTable();
 
     $('#img_file').bootstrapFileInput();
@@ -9,25 +9,24 @@ $(function(){
     $('#camb_img_file').bootstrapFileInput();
     
     $('#img_file').change(function(){
-        //alert(this.value + " " + $(this).val() + "  " + this.files[0].name + ' tamaño: ' + roundToTwo(this.files[0].size/1024/1024) + ' MB');
         comprobar_extension(this.files[0].name);
         comprobar_tamanho(this.files[0].size/1024/1024);
     });
 
     function comprobar_extension(archivo){ 
-        extensiones_permitidas = new Array(".gif", ".jpg", ".png", ".jpeg");
-        mierror = null; 
+        var extensionesPermitidas = new Array(".gif", ".jpg", ".png", ".jpeg");
+        var mierror = null;
         if(archivo){
-            extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase(); 
-            permitida = false; 
-            for(var i=0;i<extensiones_permitidas.length;i++){
-                if(extensiones_permitidas[i] == extension){
+            var extension = (archivo.substring(archivo.lastIndexOf("."))).toLowerCase();
+            var permitida = false;
+            for(var i=0;i<extensionesPermitidas.length;i++){
+                if(extensionesPermitidas[i] == extension){
                     permitida = true;
                     break;
                 } 
             } 
             if(!permitida){ 
-                mierror = "Comprueba la extensión de los archivos a subir. Sólo se pueden subir archivos con extensiones: " + extensiones_permitidas.join();
+                mierror = "Comprueba la extensión de los archivos a subir. Sólo se pueden subir archivos con extensiones: " + extensionesPermitidas.join();
                 $('#img_file').val(''); 
             } else { 
                 return 1; 
@@ -40,10 +39,10 @@ $(function(){
     }
 
     function comprobar_tamanho(tamanho){
-        tamReal = roundToTwo(tamanho);
-        tamIndi = Number(3.10);
-        error = null;
-        permitida = false;
+        var tamReal = roundToTwo(tamanho);
+        var tamIndi = Number(3.10);
+        var error = null;
+        var permitida = false;
         if(tamReal <= tamIndi){
             permitida = true;
         }
@@ -64,53 +63,11 @@ $(function(){
     }
 
     $(document).on('click', '.icono_prod', function(){
-        //alert($(this).attr('src'));
-        /*var action = $('#form_cambiar_img_prod').attr('action');
-        $('#form_cambiar_img_prod').attr('action', action+'/'+);*/
         $('#prod_det .modal-title').html($(this).attr('alt'));
         $('#imagen_producto').html('<img src="'+ $(this).attr('src') +'" style="width: 350px; height: 350px" id="img_prod_cambiar">');
         $('#url_img_prod').attr('url', $(this).attr('src'));
         $('#detalle_producto').html($(this).attr('name'));
         $('#prod_det #inp').html('<input type="hidden" value="'+ $(this).attr('data-id') +'" name="idProd">');
-    });
-
-    $(document).on('click', '.eliminar', function(){
-        // alert($(this).attr('data-id'));
-        var idp = $(this).attr('data-id');
-        apprise('¿Está seguro de eliminar este producto?', {'animate':true, 'verify':true}, function(answer){
-            if(answer){
-                $.ajax({
-                    url: urlProductos + "/eliminarprod/" + idp,
-                    type: 'post',
-                    beforeSend:function(){
-                        $('#mensaje').html('<img src="'+url+'/assets/products_img/load.GIF">');
-                    }
-                }).done(function(response){
-                    apprise(response);
-                    $('#collapse4').load($('#url_actual').val() + ' #data_table_productos');
-                    $('#mensaje').html('');
-                    setTimeout(function(){
-                        $('#data_table_productos').dataTable();
-                    }, 1000);
-                }).fail(function(){
-                    apprise('Error inesperado, intente nuevamente.');
-                });
-            } else {
-                return false;
-            }
-        });
-    });
-
-    $(document).on('click', '.editar', function(){
-        var idp = $(this).attr('data-id');
-        $.post(urlProductos+"/editarprod/" + idp, function(data){
-        	$('div#editar_producto #form_editar #codbarras').val(data.CodBarras);
-            $('div#editar_producto #form_editar #producto').val(data.NombreProducto);
-            $('div#editar_producto #form_editar #detalles').val(data.DetallesProducto);
-            $('div#editar_producto #form_editar #categoria').val(data.idCategoriaProducto);
-        }, 'json').fail(function(){
-            apprise('Error inesperado, intente nuevamente.');
-        })
     });
 
     $("#form_editar").submit(function(){
@@ -122,62 +79,9 @@ $(function(){
             }, 1000);  
         }).fail(function(){
             apprise('Error inesperado, intente nuevamente.');
-        })
+        });
         return false;
     });
-
-
-    // Filtrar datos por categoria
-    $('#sel_categoria').change(function(){
-        //alert($(this).val());
-        Filtrarcategoria($(this).val());
-    });
-
-    function Filtrarcategoria(idCat){
-        $.ajax({
-            url: urlProductos+"/filtrarprodxcat/"+idCat,
-            type: 'post',
-            dataType: 'json',
-            success:function(data){
-                //alert(data[0].NombreProducto);
-                if(data.length == 0){
-                    $('table tbody#productos').html('No existen datos');
-                    return false;
-                }
-                $('table tbody#productos').html('');
-                var productos = '';
-                for(i in data){
-                    productos += '<tr>';
-                    productos += '<td>'+(Number(i)+1)+'</td>';
-                    productos += '<td>';
-                    productos += '<a data-toggle="modal" href="#prod_det">';
-                    if(data[i].UrlFotoProducto == ''){
-                        productos += '<img src="'+url+'/assets/products_img/product-default.png'+'" class="icono_prod" name="'+data[i].DetallesProducto+'" width="20" height="20" alt="producto" >';
-                    } else {
-                        productos += '<img src="'+url+'/assets/products_img/'+data[i].UrlFotoProducto+'" class="icono_prod" name="'+data[i].DetallesProducto+'" width="20" height="20" alt="producto">';
-                    }
-                    productos += '</a>';
-                    productos += '</td>';
-                    productos += '<td>'+data[i].NombreProducto+'</td>';
-                    productos += '<td>S/. '+data[i].PrecioDistribuidor+'</td>';
-                    productos += '<td>S/. '+data[i].PrecioPublico+'</td>';
-                    productos += '<td>'+data[i].NombreCategoriaProducto+'</td>';
-                    productos += '<td>';
-                    productos += '<span class="editar" data-id="1">';
-                    productos += '<a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-default btn-sm" href="#editar_producto">Editar';
-                    productos += '</a>';
-                    productos += '</span>';
-                    productos += '</td>';
-                    productos += '<td><button class="eliminar" data-id="'+ data[i].idProducto +'">Eliminar</button></td>';
-                    productos += '</tr>';
-                }
-                $('table tbody#productos').html(productos);
-            },
-            error:function(){
-                alert("Error");
-            }
-        });
-    }
 
     $(document).on('change', '#camb_img_file', function(){
         if(comprobar_extension(this.files[0].name) == 0){
@@ -193,7 +97,6 @@ $(function(){
             return false;
         }      
         $('#btn_cambiar_img_prod').attr('disabled', false);
-        //$('#imagen_producto').html('<img src="'+url+'/assets/products_img/load.GIF">');
         readImage(this);
     });
 
@@ -247,7 +150,42 @@ $(function(){
 		var qs = listaproductos();
 		 
 		console.log(qs);*/
-
     });
 
 });
+
+function editarProducto(id){
+    $.getJSON(urlProductos + "/editarprod/" + id, function(data){
+        $('div#editar_producto #form_editar #codbarras').val(data.CodBarras);
+        $('div#editar_producto #form_editar #producto').val(data.NombreProducto);
+        $('div#editar_producto #form_editar #detalles').val(data.DetallesProducto);
+        $('div#editar_producto #form_editar #categoria').val(data.idCategoriaProducto);
+    }).fail(function(){
+        apprise('Error inesperado, intente nuevamente.');
+    });
+}
+
+function eliminarProducto(id){
+    apprise('¿Está seguro de eliminar este producto?', {'animate':true, 'verify':true}, function(answer){
+        if(answer){
+            $.ajax({
+                url: urlProductos + "/eliminarprod/" + id,
+                type: 'post',
+                beforeSend:function(){
+                    $('#mensaje').html('<img src="'+url+'/assets/products_img/load.GIF">');
+                }
+            }).done(function(response){
+                apprise(response);
+                $('#collapse4').load($('#url_actual').val() + ' #data_table_productos');
+                $('#mensaje').html('');
+                setTimeout(function(){
+                    $('#data_table_productos').dataTable();
+                }, 1000);
+            }).fail(function(){
+                apprise('Error inesperado, intente nuevamente.');
+            });
+        } else {
+            return false;
+        }
+    });
+}

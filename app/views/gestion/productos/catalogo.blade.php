@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('resources')
-  {{ HTML::script('assets/own/js/gestion/productos/catalogo.js') }}
+{{ HTML::script('assets/own/js/gestion/productos/catalogo.js') }}
 @stop
 
 @section('body')
@@ -14,39 +14,42 @@
                 <input class="rad-list-categ" type="radio" name="list-categoria" value='0'>Todos
             </label>
             @foreach($listacategoria as $lc)
-            <label class="btn btn-success">
-                <input class="rad-list-categ" type="radio" name="list-categoria" value='{{ $lc->idCategoriaProducto}}'>
-                {{$lc->NombreCategoriaProducto}}
-            </label>
+                <label class="btn btn-success">
+                    <input class="rad-list-categ" type="radio" name="list-categoria" value='{{ $lc->idCategoriaProducto }}'>
+                    {{ $lc->NombreCategoriaProducto }}
+                </label>
             @endforeach
         </div>
         <ul class="pricing-table" id="light">
           	@foreach($productos as $p)
-            <li class="col-lg-3">
-                <h3>{{ $p->NombreProducto }}</h3>
-                <div class="price-body">
-                    <div class="price">
-                        @if(empty($p->UrlFotoProducto))
-                        {{ HTML::image('assets/products_img/product-default.png', 'producto', ['class' => 'icono_prod' , 'name' => $p->DetallesProducto, 'width' => 120, 'height' => 120, 'style' => 'padding: 10px; border-radius: 100%']) }}
-                        @else
-                        {{ HTML::image('assets/products_img/'.$p->UrlFotoProducto, 'producto', ['class' => 'icono_prod' , 'name' => $p->DetallesProducto, 'width' => 120, 'height' => 120, 'style' => 'padding: 10px; border-radius: 100%']) }}
-                        @endif
+                @if(!count($p->inventarios))
+                    <?php continue; ?>
+                @endif
+                <li class="col-lg-3">
+                    <h3>{{ $p->NombreProducto }}</h3>
+                    <div class="price-body">
+                        <div class="price">
+                            @if(empty($p->UrlFotoProducto))
+                                {{ HTML::image('assets/products_img/product-default.png', 'producto', ['class' => 'icono_prod' , 'name' => $p->DetallesProducto, 'width' => 120, 'height' => 120, 'style' => 'padding: 10px; border-radius: 100%']) }}
+                            @else
+                                {{ HTML::image('assets/products_img/'.$p->UrlFotoProducto, 'producto', ['class' => 'icono_prod' , 'name' => $p->DetallesProducto, 'width' => 120, 'height' => 120, 'style' => 'padding: 10px; border-radius: 100%']) }}
+                            @endif
+                        </div>
                     </div>
-                </div>
-                <div class="features">
-                    <ul>
-                        <li><strong>S/. {{ number_format($p->PrecPublico, 2) }}</strong></li>
-                        @if(strlen($p->DetallesProducto) > 30)
-                        <li>{{ substr($p->DetallesProducto, 0, 30) }}...</li>
-                        @else
-                        <li>{{ $p->DetallesProducto }}</li>
-                        @endif
-                    </ul>
-                </div>
-                <div class="footer">
-                    {{ HTML::link('#verFicha', 'Ver Ficha', ['class' => 'btn btn-info btn-rect', 'id' => 'a-verFicha', 'data-toggle' => 'modal']) }}
-                </div>
-            </li>
+                    <div class="features">
+                        <ul>5
+                            <li><strong>S/. {{ number_format($p->inventarios[0]->PrecPublico, 2) }}</strong></li>
+                            @if(strlen($p->DetallesProducto) > 30)
+                                <li>{{ substr($p->DetallesProducto, 0, 30) }}...</li>
+                            @else
+                                <li>{{ $p->DetallesProducto }}</li>
+                            @endif
+                        </ul>
+                    </div>
+                    <div class="footer">
+                        {{ HTML::link('#verFicha', 'Ver Ficha', ['class' => 'btn btn-info btn-rect', 'id' => 'a-verFicha', 'data-toggle' => 'modal']) }}
+                    </div>
+                </li>
           	@endforeach
             <div class="clearfix"></div>
         </ul>

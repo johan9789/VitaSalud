@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('resources')
-  {{ HTML::script('assets/own/js/gestion/productos/categoria.js') }}
+{{ HTML::script('assets/own/js/gestion/productos/categoria.js') }}
 @stop
 
 @section('body')
@@ -40,20 +40,20 @@
                                 </tr>
                             </thead>
                             <tbody id="productos">
-                                @foreach($listacategoria as $lc)
+                                @foreach($categorias as $i => $categoria)
                                 <tr>
-                                    <td>{{ $j++}}</td>
-                                    <td>{{ $lc->NombreCategoriaProducto }}</td>
-                                    <td>{{ $lc->DescripcionCategoriaProducto }}</td>
+                                    <td>{{ $i + 1 }}</td>
+                                    <td>{{ $categoria->NombreCategoriaProducto }}</td>
+                                    <td>{{ $categoria->DescripcionCategoriaProducto }}</td>
                                     <td>
-                                        <span class="editar" data-id="{{ $lc->idCategoriaProducto }}">
+                                        <span onclick="editarCategoria('{{ $categoria->idCategoriaProducto }}')">
                                             <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-primary btn-sm" href="#editar_categoría">                   
-                                                <li class="fa fa-pencil"></li>
+                                                <i class="fa fa-pencil"></i>
                                             </a>
                                         </span>
-                                        <span class="eliminar" data-id="{{ $lc->idCategoriaProducto }}">
+                                        <span onclick="eliminarCategoria('{{ $categoria->idCategoriaProducto }}')">
                                             <a class="btn btn-danger btn-sm" href="#eliminar_producto" data-toggle="modal">
-                                                <li class="fa fa-trash"></li>
+                                                <i class="fa fa-trash"></i>
                                             </a>
                                         </span>
                                     </td>
