@@ -9,14 +9,8 @@ $(function(){
     $('#data-table-movimientos').dataTable();
 
     $('.rad-list-categ').change(function(){
-        // alert($(this).val());
         FiltrarporTrimestre($(this).val());
-        // $('#data-table-movimientos').dataTable();
     });
-
-    /* $(document).on('change', '.rad-list-categ', function(){
-    	FiltrarporTrimestre($(this).val());
-    }); */
 
     function FiltrarporTrimestre(op){
 
@@ -89,28 +83,22 @@ function completarDatos(id){
 
 /*************Función Ajax para listar los campos de inventario***************/
 function obtenerDatos(id){
-    alert("prueba"); 
-  $.ajax({
-    url: urlInventario+'/filtrardatos/'+id,
-    type: 'post',
-    dataType: 'json',
-    apprise(id); 
-    success:function(data){
-      if(data.idProducto == 0){
-        $('#codigo').val('');
-        $('#codbarras').val('');
-      }
-      else{
-        $('#codigo').val(Number(data.idProducto));
-        $('#codbarras').val(Number(data.codbarras));
-      }
-
-      alert(data.idProducto);
-    },
-    
-    error:function(){
-      apprise('Error');
-    }
+    $.ajax({
+        url: urlInventario + '/filtrardatos/' + id,
+        type: 'get',
+        dataType: 'json',
+        success: function(data){
+            if(data.idProducto == 0){
+                $('#codigo').val('');
+                $('#codbarras').val('');
+            } else {
+                $('#codigo').val(Number(data.idProducto));
+                $('#codbarras').val(Number(data.codbarras));
+            }
+            alert(data.idProducto);
+        },
+        error:function(){
+            apprise('Error');
+        }
   });
-
 }

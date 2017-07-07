@@ -9,38 +9,22 @@ $(function(){
     $('#data-table-movimientos').dataTable();
 
     $('.rad-list-categ').change(function(){
-        // alert($(this).val());
         FiltrarporTrimestre($(this).val());
-        // $('#data-table-movimientos').dataTable();
     });
 
-    /* $(document).on('change', '.rad-list-categ', function(){
-    	FiltrarporTrimestre($(this).val());
-    }); */
-
     function FiltrarporTrimestre(op){
-
     	$.ajax({
-
-    		url: urlInventario+'/filtrarportrimestre/'+op,
+    		url: urlInventario + '/filtrarportrimestre/' + op,
     		type: 'post',
     		dataType: 'json',
     		beforeSend:function(){
     			$('div#mensaje').html('<img src="'+url+'/assets/products_img/load.GIF">');
     		},
     		success:function(data){
-    			//alert(data[0].idMovimiento);
-    			//alert(data.length);
     			$('div#mensaje').html('');
-
-    			/*if(data.length == 0){
-    				$('tbody#movimientos').html('');
-    				return false;
-    			}*/
-
     			$('tbody#movimientos').html('');
     			var movimientos = '';
-    			for(i in data){
+    			for(var i in data){
     				movimientos += '<tr>';
     				movimientos += '<td>'+(Number(i)+1)+'</td>';
     				movimientos += '<td>'+data[i].FechaMovimiento+'</td>';
@@ -54,18 +38,14 @@ $(function(){
     				movimientos += '</tr>';
     			}
     			$('tbody#movimientos').html(movimientos);
-
     			setTimeout(function(){
                     $('#data-table-movimientos').dataTable();
                 }, 1000);
-
     		},
     		error:function(){
     			alert('Error');
     		}
-
     	});
-
     }
 
 });

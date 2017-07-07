@@ -42,11 +42,7 @@ $(function(){
                 }
                 $('ul#light').html('');
                 var productos = '';
-                for(i in data){
-                    var inventarios = data[i].inventarios;
-                    if(!inventarios.length){
-                        continue;
-                    }
+                for(var i in data){
                     productos += '<li class="col-lg-3">';
                     productos += '<h3>' + data[i].NombreProducto + '</h3>';
                     productos += '<div class="price-body">';
@@ -60,7 +56,7 @@ $(function(){
                     productos += '</div>';
                     productos += '<div class="features">';
                     productos += '<ul>';
-                    productos += '<li><strong>S/. ' + Number(inventarios[0].PrecPublico).toFixed(2) + '</strong></li>';
+                    productos += '<li><strong>S/. ' + Number(data[i].inventarios[0].PrecPublico).toFixed(2) + '</strong></li>';
                     if(data[i].DetallesProducto.length > 30){
                         productos += '<li>' + data[i].DetallesProducto.substr(0, 30) + '...</li>';
                     } else {

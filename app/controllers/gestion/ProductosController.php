@@ -27,7 +27,6 @@ class ProductosController extends \BaseController {
 	public function postRegistrarprod(){
 		$bandera = false;
 		$inputs = \Input::all();
-		$usu_register = \Session::get('usuario');
 		$fecha = date('Y-m-d');
 		$codbarrasexist = '';
 		$nomprodexist = '';
@@ -53,38 +52,40 @@ class ProductosController extends \BaseController {
 		$file = \Input::file('img_file');
 		$extension = strtolower($file->getClientOriginalExtension());
 		// Establecemos nuevo nombre
-		$nuevo_nombre = md5(microtime()).'.'.$extension;      	
-     	$upload = $file->move($path, $nuevo_nombre);
+		$nuevoNombre = md5(microtime()).'.'.$extension;
+     	$upload = $file->move($path, $nuevoNombre);
      	if($upload){
-			$p = new \Productos();
-			$p->CodBarras			= ($inputs['codbarras'] == '')?'':$inputs['codbarras'];
-			$p->NombreProducto 		= $inputs['producto'];
-			$p->DetallesProducto	= $inputs['detalles'];
-			$p->UrlFotoProducto		= $nuevo_nombre;
-			$p->idCategoriaProducto	= $inputs['categoria'];
-			$p->estado		 		= 1;
-			$p->save();
+			$producto = new \Productos();
+			$producto->CodBarras = ($inputs['codbarras'] == '')?'':$inputs['codbarras'];
+			$producto->NombreProducto = $inputs['producto'];
+			$producto->DetallesProducto = $inputs['detalles'];
+			$producto->UrlFotoProducto	= $nuevoNombre;
+			$producto->idCategoriaProducto	= $inputs['categoria'];
+			$producto->estado = 1;
+			$producto->save();
 
-			$id_ult_producto = \Productos::orderBy('idProducto', 'desc')->get()[0]->idProducto;
+			$dataInventario = [
+			    'idProducto' => $producto->idProducto,
+                'Existencia' => 0,
+                'Costo' => 0,
+                'PrecDistribuidor' => 0,
+                'PrecPublico' => 0,
+                'Estado' => 0,
+                'Comentario' => ''
+            ];
 
-			$arreglo_insert_inventario = array('idProducto' => $id_ult_producto, 
-													'Existencia' => 0, 
-													'Costo' => 0, 
-													'PrecDistribuidor' => 0, 
-													'PrecPublico' => 0, 
-													'Estado' => 0,
-													'Comentario' => '');
+			$dataMovimiento = [
+			    'idProductoMovimiento' => $producto->idProducto,
+                'CantidadMovimiento' => 0,
+                'CostoMovimiento' => 0,
+                'TotalCosto' => 0,
+                'TipoMovimiento' => 'Inventario Inicial',
+                'FechaMovimiento' => $fecha,
+                'RegistradoPor' => \Session::get('usuario')
+            ];
 
-			$arreglo_insert_movimiento = array('idProductoMovimiento' => $id_ult_producto, 
-													'CantidadMovimiento' => 0, 
-													'CostoMovimiento' => 0, 
-													'TotalCosto' => 0, 
-													'TipoMovimiento' => 'Inventario Inicial', 
-													'FechaMovimiento' => $fecha,
-													'RegistradoPor' => $usu_register);
-
-			\DB::table('inventario_adm')->insert($arreglo_insert_inventario);
-			\DB::table('movimientos_adm')->insert($arreglo_insert_movimiento);
+			\DB::table('inventario_adm')->insert($dataInventario);
+			\DB::table('movimientos_adm')->insert($dataMovimiento);
 
 			\Session::flash('mensaje', 'Producto Registrado');
 			return \Redirect::to('gestion/productos');
@@ -99,11 +100,11 @@ class ProductosController extends \BaseController {
 	 */
 	public function postRegistrarcat(){
 		$inputs = \Input::all();
-		$c = new \Categoriaproducto();
-		$c->NombreCategoriaProducto 		= $inputs['categoria'];
-		$c->DescripcionCategoriaProducto 	= $inputs['descripcion'];
-		$c->estado 							= 1;
-		$c->save();
+		$categoriaProducto = new \Categoriaproducto();
+		$categoriaProducto->NombreCategoriaProducto = $inputs['categoria'];
+		$categoriaProducto->DescripcionCategoriaProducto = $inputs['descripcion'];
+		$categoriaProducto->estado = 1;
+		$categoriaProducto->save();
 		if($inputs['ubicacion'] == 'productos'){
 			return \Redirect::to('gestion/productos');
 		} else {
@@ -116,13 +117,13 @@ class ProductosController extends \BaseController {
 	 * 
 	 */
 	public function postEliminarcategoria($idCategoriaProducto=null){
-		$cp = \Categoriaproducto::find($idCategoriaProducto);
-		if(is_null($idCategoriaProducto) || empty($cp)){
+		$categoriaProducto = \Categoriaproducto::find($idCategoriaProducto);
+		if(is_null($idCategoriaProducto) || empty($categoriaProducto)){
 			\Session::flash('ErrorElimCat', 'Error al eliminar categoria');
 			return "Error al Eliminar";
 		} else {
-			$cp->estado = 0;
-			$cp->save();
+			$categoriaProducto->estado = 0;
+			$categoriaProducto->save();
 			return "Categoria eliminada.";
 		}		
 	}
@@ -189,13 +190,12 @@ class ProductosController extends \BaseController {
 		if(!\Session::has('id_editar_prod')){
 			return 'Error';
 		}
-		$id_p_m = \Session::get('id_editar_prod');
-		$p = \Productos::find($id_p_m);
-		$inputs = \Input::All();
-		$p->NombreProducto 		= $inputs['producto'];
-		$p->DetallesProducto	= $inputs['detalles'];
-		$p->idCategoriaProducto	= $inputs['categoria'];
-		$p->save();
+        $inputs = \Input::All();
+		$producto = \Productos::find(\Session::get('id_editar_prod'));
+		$producto->NombreProducto = $inputs['producto'];
+		$producto->DetallesProducto = $inputs['detalles'];
+		$producto->idCategoriaProducto	= $inputs['categoria'];
+		$producto->save();
 		\Session::forget('id_editar_prod');
 		return "Producto Modificado";
 	}
@@ -210,10 +210,7 @@ class ProductosController extends \BaseController {
 			return $productos;
 		}
         $categoriaProducto = \Categoriaproducto::findOrFail($idCat);
-		$productos = $categoriaProducto->productos()->where('estado', 1)
-                        ->with(['inventarios' => function($q){
-                            $q->where('Estado', 1)->orderBy('idInventario', 'desc');
-                        }])->get();
+		$productos = $categoriaProducto->productos()->listaInventario()->get();
 		return $productos;
 	}
 
@@ -253,12 +250,12 @@ class ProductosController extends \BaseController {
      	$file = \Input::file('camb_img_file'); 
      	// $nombre = $file->getClientOriginalName();
      	$extension  = $file->getClientOriginalExtension();
-     	$nuevo_nombre = md5(microtime()).'.'.$extension; 
+     	$nuevoNombre = md5(microtime()).'.'.$extension;
     	// $tamano = $file->getSize();        	
-     	$upload = $file->move($path, $nuevo_nombre);
+     	$upload = $file->move($path, $nuevoNombre);
      	if($upload){
 			$productos = \Productos::find($post['idProd']);
-			$productos->UrlFotoProducto = $nuevo_nombre;
+			$productos->UrlFotoProducto = $nuevoNombre;
 			$productos->save();
 			\Session::flash('mensaje', 'Se actualizó la imagen de producto.');
 			return \Redirect::back();

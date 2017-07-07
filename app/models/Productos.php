@@ -65,37 +65,14 @@ class Productos extends Eloquent {
 	 * ...
 	 *
 	 * Utilizado en:
-	 * Gestion\ProductosController@postFiltrarprodxcat
+	 * Gestion\ProductosController@getFiltrarprodxcat
 	 * Gestion\ProductosController@getCatalogo
 	 *
 	 */
 	public function scopeListaInventario($query){
-        return $query->where('estado', 1)->with(['inventarios' => function($q){
+        return $query->where('estado', 1)->whereHas('inventarios', function($q){
             $q->where('Estado', 1)->orderBy('idInventario', 'desc');
-        }]);
-	}
-
-	/**
-	 * Método para determinar que categorias se estan usando para con los respectivos productos
-	 *
-	 * Utilizado en:
-	 * Gestion\InventarioController@getRegistroentrada
-	 * Gestion\InventarioController@getKardex
-	 *
-	 */
-	public static function prodcategoria(){
-		return Productos::select('productos.idCategoriaProducto', 'categoria_producto.NombreCategoriaProducto')
-							->join('categoria_producto', 'productos.idCategoriaProducto', '=', 'categoria_producto.idCategoriaProducto')
-							->groupBy('productos.idCategoriaProducto');
-	}
-
-	/**
-	 * Utilizado en:
-	 * Gestion\InventarioController@postFiltrardatos	 
-	 *
-	 */
-	public static function filtradokardex($id){
-		return Productos::where('idProducto', '=', $id);
+        })->with('inventarios');
 	}
 
 }

@@ -22,9 +22,6 @@
         </div>
         <ul class="pricing-table" id="light">
           	@foreach($productos as $p)
-                @if(!count($p->inventarios))
-                    <?php continue; ?>
-                @endif
                 <li class="col-lg-3">
                     <h3>{{ $p->NombreProducto }}</h3>
                     <div class="price-body">
@@ -37,7 +34,7 @@
                         </div>
                     </div>
                     <div class="features">
-                        <ul>5
+                        <ul>
                             <li><strong>S/. {{ number_format($p->inventarios[0]->PrecPublico, 2) }}</strong></li>
                             @if(strlen($p->DetallesProducto) > 30)
                                 <li>{{ substr($p->DetallesProducto, 0, 30) }}...</li>
