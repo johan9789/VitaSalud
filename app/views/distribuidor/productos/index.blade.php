@@ -3,12 +3,12 @@
 @section('resources')
 <script>
     function listaproductos(){
-        var arr_codBarras = new Array();//tambien se puede declarar var arr_codBarras = [];
+        var arr_codBarras = new Array(); // tambien se puede declarar var arr_codBarras = [];
         var arr_NomProducto = new Array();
 
         @foreach($productosDist as $p)
-            arr_codBarras.push('{{{$p->CodBarrasDist}}}');
-            arr_NomProducto.push('{{{$p->NombreProductoDist}}}');
+            arr_codBarras.push('{{{ $p->CodBarrasDist }}}');
+            arr_NomProducto.push('{{{ $p->NombreProductoDist }}}');
         @endforeach
 
         var arr_codBarras_gen = new Array();
@@ -27,9 +27,9 @@
 {{ HTML::script('assets/own/js/distribuidor/productos/index.js') }}
 {{ HTML::script('assets/lib/jquery-form/jquery.form.js') }}
 <script>
-  $(function() {
+$(function(){
     Metis.MetisProgress();
-  });
+});
 </script>
 @stop
 
@@ -67,37 +67,37 @@
                             </thead>
                             <tbody id="productos">
                                 @foreach($productosDist as $prod)
-                                <tr>
-                                    <td>
-                                        <a data-toggle="modal" href="#prod_det">
-                                          @if(empty($prod->UrlFotoProductoDist))
-                                            {{ HTML::image('assets/products_dist_img/product-default.png', $prod->NombreProductoDist, ['class' => 'icono_prod' , 'name' => $prod->DetallesProductoDist, 'width' => 20, 'height' => 20, 'data-id' => MD5($prod->idProductoDist), 'data-categoria' => $prod->idCategoriaProductoDist]) }}
-                                          @else
-                                            {{ HTML::image($prod->UrlFotoProductoDist, $prod->NombreProductoDist, ['class' => 'icono_prod' , 'name' => $prod->DetallesProductoDist, 'width' => 20, 'height' => 20, 'data-id' => MD5($prod->idProductoDist), 'data-categoria' => $prod->idCategoriaProductoDist]) }}
-                                          @endif
-                                        </a>
-                                    </td>
-                                    <td><label>{{{ $prod->CodBarrasDist }}}</label></td>
-                                    <td>{{{ $prod->NombreProductoDist }}}</td>
-                                    <td>{{{ $prod->NombreCategoriaProductoDist }}}</td>
-                                    @if(strlen($prod->DetallesProductoDist) > 30)
-                                    <td>{{ substr($prod->DetallesProductoDist, 0, 30) }}...</td>
-                                    @else
-                                    <td>{{ $prod->DetallesProductoDist }}</td>
-                                    @endif
-                                    <td>
-                                        <span class="editar" data-id="{{{ MD5($prod->idProductoDist) }}}">
-                                            <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-primary btn-sm" href="#editar_producto">                   
-                                                <li class="fa fa-pencil"></li>
+                                    <tr>
+                                        <td>
+                                            <a data-toggle="modal" href="#prod_det">
+                                                @if(empty($prod->UrlFotoProductoDist))
+                                                    {{ HTML::image('assets/products_dist_img/product-default.png', $prod->NombreProductoDist, ['class' => 'icono_prod' , 'name' => $prod->DetallesProductoDist, 'width' => 20, 'height' => 20, 'data-id' => MD5($prod->idProductoDist), 'data-categoria' => $prod->idCategoriaProductoDist]) }}
+                                                @else
+                                                    {{ HTML::image($prod->UrlFotoProductoDist, $prod->NombreProductoDist, ['class' => 'icono_prod' , 'name' => $prod->DetallesProductoDist, 'width' => 20, 'height' => 20, 'data-id' => MD5($prod->idProductoDist), 'data-categoria' => $prod->idCategoriaProductoDist]) }}
+                                                @endif
                                             </a>
-                                        </span>
-                                        <span class="eliminar" data-id="{{{ MD5($prod->idProductoDist) }}}">
-                                            <a class="btn btn-danger btn-sm" href="#eliminar_producto" data-toggle="modal">
-                                                <li class="fa fa-trash"></li>
-                                            </a>
-                                        </span>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td><label>{{{ $prod->CodBarrasDist }}}</label></td>
+                                        <td>{{{ $prod->NombreProductoDist }}}</td>
+                                        <td>{{{ $prod->categoria->NombreCategoriaProductoDist }}}</td>
+                                        @if(strlen($prod->DetallesProductoDist) > 30)
+                                            <td>{{ substr($prod->DetallesProductoDist, 0, 30) }}...</td>
+                                        @else
+                                            <td>{{ $prod->DetallesProductoDist }}</td>
+                                        @endif
+                                        <td>
+                                            <span class="editar" data-id="{{{ MD5($prod->idProductoDist) }}}">
+                                                <a data-toggle="modal" data-original-title="Help" data-placement="bottom" class="btn btn-primary btn-sm" href="#editar_producto">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </span>
+                                            <span class="eliminar" data-id="{{{ MD5($prod->idProductoDist) }}}">
+                                                <a class="btn btn-danger btn-sm" href="#eliminar_producto" data-toggle="modal">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -169,28 +169,29 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Subir Imagen</h4>
             </div>
-            {{ Form::open(['url' => 'distribuidor/productos/upload-imgproducto', 'class' => 'form-horizontal', 'files'=>true, 'id' => 'frm_productos_dist_upload']) }}
+            {{ Form::open(['url' => 'distribuidor/productos/upload-imgproducto', 'class' => 'form-horizontal', 'files' => true, 'id' => 'frm_productos_dist_upload']) }}
                 <div class="modal-body">
                     <div id="div-1" class="body">
                         <center>
                             <div class="bg-red lter" id="msg_alert" style="margin: 0 0 10px 0; padding:10px 10px 10px 10px;"></div>
                         </center>
                         <div class="form-group">
-                        <label class="control-label col-lg-4">Image Upload</label>
-                        <div class="col-lg-8">
-                          <div class="fileinput fileinput-new" data-provides="fileinput">
-                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
-                            <div>
-                              <span class="btn btn-default btn-file"><span class="fileinput-new">Select image</span> <span class="fileinput-exists">Change</span> 
-                                <input type="file" name="img_file">
-                              </span> 
-                              <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a> 
+                            <label class="control-label col-lg-4">Image Upload</label>
+                            <div class="col-lg-8">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 200px; height: 150px;"></div>
+                                    <div>
+                                        <span class="btn btn-default btn-file">
+                                            <span class="fileinput-new">Select image</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" name="img_file">
+                                        </span>
+                                        <a href="#" class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
-
-                      <div class="form-group" id="div_progress">
+                        <div class="form-group" id="div_progress">
                             <label class="control-label col-lg-4">Subiendo...</label>
                             <div class="col-lg-6">
                                 <div class="progress progress-striped active">
@@ -206,7 +207,6 @@
                     <div class="form-actions no-margin-bottom">
                         {{ Form::hidden('id_prod_dist_ult', '', ['id' => 'id_prod_dist_ult']) }}
                         {{ Form::submit('Subir', ['class' => 'btn btn-primary', 'id' => 'btn_UploadProdDist']) }}
-                        
                     </div>                
                 </div>
             {{ Form::close() }}
@@ -231,7 +231,7 @@
                                 <div id="imagen_producto" align="center"></div>
                                 <br>
                                 <span id="url_img_prod" url="{{{ URL::to('assets/products_dist_img/') }}}"></span>
-                                    {{ Form::file('img_file', ['required', 'id' => 'camb_img_file', 'data-filename-placement' => 'inside', 'title' => 'Escoger nueva imagen']) }}
+                                {{ Form::file('img_file', ['required', 'id' => 'camb_img_file', 'data-filename-placement' => 'inside', 'title' => 'Escoger nueva imagen']) }}
                             </div>
                             <div id="inp"></div>
                             <div class="form-actions no-margin-bottom">
@@ -242,13 +242,12 @@
                                 <label class="control-label col-lg-4">Subiendo...</label>
                                 <div class="col-lg-6">
                                     <div class="progress progress-striped active">
-                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%">
+                                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
                                            <span class="sr-only">0% Complete (success)</span> 
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
                         {{ Form::close() }}
                     </center>
                 </div>
@@ -261,10 +260,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal --><!-- /#helpModal -->
 
-
 <span id="ur" name="{{ URL::to('distribuidor/productos') }}"></span>
 <span id="u" name="{{ URL::to('') }}"></span>
-
-
 
 @stop
