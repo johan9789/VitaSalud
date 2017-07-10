@@ -3,16 +3,14 @@
 @section('body')
 
 <div id="div_proveedores">
-  	<div id="div_proveedores_act">
-  		<div class="row">
-    		<div class="col-lg-12">
-  				<div class="box">
-        			<header>
-          				<div class="icons">
-            				<i class="fa fa-table"></i>
-          				</div>
-          				<h5>Proveedores</h5>
-          				<div class="toolbar">
+    <div id="div_proveedores_act">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="box">
+                    <header>
+                        <div class="icons"><i class="fa fa-table"></i></div>
+                        <h5>Proveedores</h5>
+                        <div class="toolbar">
                             <nav style="padding: 5px;">
                                 <a data-toggle="modal" class="btn btn-default btn-sm" href="#nuevo_proveedor">
                                     <i class="glyphicon glyphicon-file"></i>
@@ -20,22 +18,22 @@
                                 </a>
                             </nav>
                         </div>
-        			</header>
-        			<div id="collapse4" class="body">
-          				<table id="data_table_proveedores" class="table table-bordered table-condensed table-hover table-striped">
-            				<thead>
-				              	<tr>
-				                	<th>Razón social</th>
-					                <th>RUC</th>
-					                <th>Teléfono</th>
-					                <th>E-mail</th>
-					                <th>Dirección</th>
+                    </header>
+                    <div id="collapse4" class="body">
+                        <table id="data_table_proveedores" class="table table-bordered table-condensed table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Razón social</th>
+                                    <th>RUC</th>
+                                    <th>Teléfono</th>
+                                    <th>E-mail</th>
+                                    <th>Dirección</th>
                                     <th>Distrito</th>
-					                <th>Opción</th>
-				              	</tr>
-            				</thead>
-            				<tbody id="">
-                				@foreach($proveedores as $prov)
+                                    <th>Opción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="">
+                                @foreach($proveedores as $prov)
                                     <tr>
                                         <td>{{ $prov->razon_social_proveedor_dist }}</td>
                                         <td>{{ $prov->RUC }}</td>
@@ -46,24 +44,24 @@
                                         <td>
                                             <span class="editar" data-id="J">
                                                 <a data-toggle="modal" class="btn btn-primary btn-sm" href="#editar_proveedor" onclick="editarProveedor('{{ $prov->id_proveedor_dist }}', '{{ $prov->distrito->iddistrito }}');">
-                                                    <li class="fa fa-pencil"></li>
+                                                    <i class="fa fa-pencil"></i>
                                                 </a>
                                             </span>
                                             <span class="editar" data-id="J">
                                                 <a data-toggle="modal" class="btn btn-danger btn-sm" href="#" onclick="eliminarProveedor('{{ $prov->id_proveedor_dist }}');">
-                                                    <li class="fa fa-trash"></li>
+                                                    <i class="fa fa-trash"></i>
                                                 </a>
                                             </span>
                                         </td>
                                     </tr>
-                				@endforeach
-            				</tbody>
-          				</table>
-        			</div>
-      			</div>
-			</div>
-  		</div>
-  	</div>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div id="nuevo_proveedor" class="modal fade">
