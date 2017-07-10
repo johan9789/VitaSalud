@@ -1,8 +1,12 @@
 <?php
 class Distribuidores extends Eloquent {
-	protected $table = 'distribuidores';
-	protected $primaryKey = 'idDistribuidor';
-	public $timestamps = false;
+    protected $table = 'distribuidores';
+    protected $primaryKey = 'idDistribuidor';
+    public $timestamps = false;
+
+    public function movimientos(){
+        return $this->hasMany('DistMovimientos', 'idDistribuidor');
+    }
 
 	/**
 	 * ...

@@ -12,7 +12,7 @@ class InventarioController extends BaseController {
 	}
 
 	public function getIndex(){
-		$listaInventario = Inventario::listaStock()->get();
+		$listaInventario = Inventario::stock()->get();
 		$prodRecientes = Inventario::prodRecientes()->get();
 		if(count($listaInventario) == 0){
 			$aviso = (count($prodRecientes) > 1) ? "Productos" : "Producto";

@@ -15,7 +15,7 @@ class Inventario extends Eloquent {
 	 * Gestion\InventarioController@getIndex
 	 *
 	 */
-	public function scopeListaStock($query){
+	public function scopeStock($query){
 	    return $query->select(DB::raw('*, SUM(inventario_adm.Existencia) as stock'))
                     ->join('productos', 'inventario_adm.idProducto', '=', 'productos.idProducto')
                     ->join('categoria_producto', 'categoria_producto.idCategoriaProducto', '=', 'productos.idCategoriaProducto')

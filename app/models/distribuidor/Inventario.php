@@ -1,33 +1,33 @@
 <?php
 namespace Model\Distribuidor;
 
+use DB;
+
 class Inventario extends \Eloquent {
-	protected $table = 'inventario_distribuidor';
-	protected $primaryKey = 'idProducto';
-	public $timestamps = false;
+    protected $table = 'inventario_distribuidor';
+    protected $primaryKey = 'idProducto';
+    public $timestamps = false;
 
-	public static function lista($id_distribuidor){
-		return Inventario::join('productos', 'inventario_distribuidor.idProducto', '=', 'productos.idProducto')
-						->where('idDistribuidor', '=', $id_distribuidor);
-	}
+    public static function lista($id_distribuidor){
+        return Inventario::join('productos', 'inventario_distribuidor.idProducto', '=', 'productos.idProducto')
+                        ->where('idDistribuidor', '=', $id_distribuidor);
+    }
 
-	/**
-	 * ...
-	 *
-	 * Utilizado en:
-	 * Distribuidor\Gestion\InventarioController@getIndex
-	 *
-	 */
-	public static function lista_stock($id_distribuidor){
-		return \DB::select("SELECT *, SUM(i.Existencia) as stock  
-							FROM inventario_distribuidor i
-							INNER JOIN producto_distribuidor p
-								ON(i.idProductoDist = p.idProductoDist)
-							INNER JOIN categoria_producto_distribuidor c
-								ON(c.idCategoriaProductoDist = p.idCategoriaProductoDist)
-							WHERE p.EstadoProductoDist = 1 AND i.idDistribuidor = $id_distribuidor
-							GROUP BY i.idProductoDist");
-	}
+    /**
+     * ...
+     *
+     * Utilizado en:
+     * Distribuidor\Gestion\InventarioController@getIndex
+     *
+     */
+    public function scopeStock($query, $idDistribuidor){
+        return $query->select(DB::raw('*, SUM(inventario_distribuidor.Existencia) as stock'))
+                    ->join('producto_distribuidor', 'inventario_distribuidor.idProductoDist', '=', 'producto_distribuidor.idProductoDist')
+                    ->join('categoria_producto_distribuidor', 'categoria_producto_distribuidor.idCategoriaProductoDist', '=', 'producto_distribuidor.idCategoriaProductoDist')
+                    ->where('producto_distribuidor.EstadoProductoDist', 1)
+                    ->where('inventario_distribuidor.idDistribuidor', $idDistribuidor)
+                    ->groupBy('inventario_distribuidor.idProductoDist');
+    }
 
 	/*Productos que estan en el inventario del distrinbuidor x*/
 	public static function prod_en_inv($id_pedido, $id_distribuidor){
